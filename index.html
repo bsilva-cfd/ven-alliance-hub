@@ -4,22 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[VEN] Alliance Hub - Complete Command Center</title>
+    
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --bg-dark: #0f172a;
-            --sidebar-bg: #1e293b;
-            --card-bg: #1e293b;
+            --sidebar-bg: #111827;
+            --card-bg: #182234;
             --card-inner: #0f172a;
-            --accent-blue: #38bdf8;
-            --accent-hover: #0284c7;
-            --border-color: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --star-gold: #f59e0b;
+            --accent-gold: #d4af37;
+            --accent-gold-hover: #e7c766;
+            --border-color: rgba(212, 175, 55, 0.25);
+            --border-solid: #d4af37;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --star-gold: #d4af37;
             --star-empty: #374151;
             --success: #22c55e;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --font-header: 'Orbitron', sans-serif;
+            --font-body: 'Inter', sans-serif;
         }
 
         * {
@@ -28,12 +37,35 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: var(--font-body);
             background-color: var(--bg-dark);
             color: var(--text-main);
             display: flex;
             min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Custom Webkit Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-gold-hover);
         }
 
         /* Mobile Header Navigation Toggle */
@@ -41,7 +73,7 @@
             display: none;
             background-color: var(--sidebar-bg);
             padding: 15px 20px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--accent-gold);
             justify-content: space-between;
             align-items: center;
             position: fixed;
@@ -53,12 +85,13 @@
 
         .menu-toggle {
             background: transparent;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            font-size: 1.2rem;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 1.1rem;
             padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
+            font-family: var(--font-header);
         }
 
         /* Sidebar Navigation Layout */
@@ -79,11 +112,12 @@
 
         .brand-section {
             padding: 24px 20px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 2px solid var(--accent-gold);
         }
 
         .brand-title {
-            color: var(--accent-blue);
+            color: var(--accent-gold);
+            font-family: var(--font-header);
             font-size: 1.3rem;
             font-weight: 800;
             letter-spacing: 0.5px;
@@ -103,8 +137,9 @@
         }
 
         .nav-group-title {
-            color: var(--text-muted);
-            font-size: 0.7rem;
+            color: var(--accent-gold);
+            font-family: var(--font-header);
+            font-size: 0.72rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.8px;
@@ -115,24 +150,25 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 11px 14px;
+            padding: 10px 14px;
             color: var(--text-muted);
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.92rem;
-            transition: all 0.2s;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
             text-decoration: none;
         }
 
         .nav-item:hover {
-            background-color: var(--card-inner);
-            color: #fff;
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
         }
 
         .nav-item.active {
-            background-color: var(--accent-hover);
-            color: #fff;
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            font-weight: bold;
         }
 
         /* Main Workspace Content Area */
@@ -148,13 +184,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: var(--card-bg);
+            background-color: var(--sidebar-bg);
             border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent-gold);
             padding: 18px 24px;
             border-radius: 12px;
             margin-bottom: 25px;
             flex-wrap: wrap;
             gap: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.25);
+        }
+
+        .top-status-bar h2 {
+            font-family: var(--font-header);
+            color: var(--accent-gold);
         }
 
         .kingdom-badge {
@@ -162,80 +205,92 @@
             padding: 8px 18px;
             border-radius: 20px;
             font-size: 0.95rem;
-            border: 1px solid var(--accent-blue);
+            border: 1px solid var(--accent-gold);
             font-weight: bold;
-            color: var(--accent-blue);
+            color: var(--accent-gold);
+            font-family: var(--font-header);
         }
 
-        /* Module Content Blocks & Guides */
+        /* Module Content Blocks */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 10px 25px rgba(212,175,55,.15);
         }
 
         .card h2, .card h3 {
-            color: #fff;
+            font-family: var(--font-header);
+            color: var(--accent-gold);
             margin-bottom: 8px;
         }
 
+        /* Guide Specific Typography */
         .guide-content h2 {
-            font-size: 1.3rem;
-            color: var(--accent-blue);
-            margin: 20px 0 10px 0;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 6px;
+            font-family: var(--font-header);
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            margin: 25px 0 12px 0;
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 8px;
         }
 
         .guide-content h3 {
-            font-size: 1.05rem;
+            font-family: var(--font-header);
+            font-size: 1.1rem;
             color: #fff;
-            margin: 15px 0 8px 0;
+            margin: 18px 0 8px 0;
         }
 
         .guide-content p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.5;
             margin-bottom: 12px;
         }
 
         .guide-content ul {
             list-style: none;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            margin-left: 5px;
         }
 
         .guide-content ul li {
             position: relative;
-            padding-left: 22px;
+            padding-left: 24px;
             color: var(--text-main);
             font-size: 0.93rem;
-            margin-bottom: 8px;
-            line-height: 1.4;
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
 
         .guide-content ul li::before {
-            content: "•";
+            content: "✦";
             position: absolute;
-            left: 6px;
-            color: var(--accent-blue);
-            font-size: 1.2rem;
+            left: 4px;
+            color: var(--accent-gold);
+            font-size: 0.9rem;
         }
 
         blockquote {
-            background-color: var(--card-inner);
-            border-left: 4px solid var(--accent-blue);
-            padding: 16px;
+            background-color: rgba(255,255,255,.05);
+            border-left: 4px solid var(--accent-gold);
+            padding: 18px 20px;
             border-radius: 6px;
-            margin: 20px 0;
+            margin: 25px 0;
             color: var(--text-main);
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-style: italic;
         }
 
         /* Sub Navigation Tabs for Calculators */
@@ -257,12 +312,14 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
+            font-family: var(--font-body);
         }
 
         .sub-tab-btn.active, .sub-tab-btn:hover {
-            background-color: var(--card-inner);
-            color: var(--accent-blue);
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            font-weight: bold;
         }
 
         .sub-tab-content { display: none; }
@@ -301,10 +358,11 @@
         .timeline-item.completed::before { background-color: var(--success); }
 
         .timeline-item.current {
-            border-color: var(--accent-blue);
-            background-color: #0c263b;
+            border-color: var(--accent-gold);
+            background-color: #1a2233;
+            box-shadow: 0 0 15px rgba(212,175,55,.15);
         }
-        .timeline-item.current::before { background-color: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue); }
+        .timeline-item.current::before { background-color: var(--accent-gold); box-shadow: 0 0 10px var(--accent-gold); }
 
         .timeline-header {
             display: flex;
@@ -322,6 +380,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: var(--font-header);
         }
 
         .tag {
@@ -332,10 +391,10 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
-        .tag.heroes { background: #1e40af; color: #93c5fd; }
-        .tag.pets { background: #065f46; color: #6ee7b7; }
+        .tag.heroes { background: #1e3a8a; color: #bfdbfe; }
+        .tag.pets { background: #14532d; color: #bbf7d0; }
         .tag.castle { background: #5b21b6; color: #ddd6fe; }
-        .tag.kvk { background: #991b1b; color: #fca5a5; }
+        .tag.kvk { background: #78350f; color: #fde68a; }
         .tag.tech { background: #854d0e; color: #fde047; }
 
         .status-pill {
@@ -345,7 +404,7 @@
             font-weight: bold;
         }
         .status-pill.passed { background: rgba(34, 197, 94, 0.15); color: var(--success); }
-        .status-pill.active { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+        .status-pill.active { background: rgba(212, 175, 55, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
         .status-pill.upcoming { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
 
         .timeline-desc { color: var(--text-muted); font-size: 0.88rem; margin: 6px 0 0 0; }
@@ -377,6 +436,7 @@
             color: #fff;
             font-size: 0.95rem;
             outline: none;
+            font-family: var(--font-body);
         }
 
         /* Interactive Star Calculator Component */
@@ -398,11 +458,13 @@
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.2s;
+            font-family: var(--font-body);
         }
 
         .mode-tab-btn.active {
-            background-color: var(--card-bg);
-            color: var(--text-main);
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            font-weight: bold;
         }
 
         .selection-section {
@@ -439,7 +501,7 @@
         }
 
         .star-icon:hover { transform: scale(1.18); }
-        .star-icon.filled { filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.4)); }
+        .star-icon.filled { filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4)); }
 
         .tier-selector {
             display: flex;
@@ -462,26 +524,27 @@
         }
 
         .tier-btn.active {
-            background: var(--accent-blue);
+            background: var(--accent-gold);
             color: #000;
-            border-color: var(--accent-blue);
+            border-color: var(--accent-gold);
         }
 
         .action-btn {
             width: 100%;
-            padding: 12px;
-            background-color: var(--accent-hover);
+            padding: 14px;
+            background-color: var(--accent-gold);
             border: none;
             border-radius: 8px;
-            color: white;
+            color: var(--sidebar-bg);
             font-weight: bold;
             font-size: 1rem;
             cursor: pointer;
             margin-top: 10px;
-            transition: background 0.2s;
+            transition: background 0.25s;
+            font-family: var(--font-header);
         }
 
-        .action-btn:hover { background-color: #0369a1; }
+        .action-btn:hover { background-color: var(--accent-gold-hover); transform: translateY(-2px); }
 
         .shards-input-group {
             display: flex;
@@ -504,7 +567,7 @@
 
         .result-box {
             background-color: var(--card-inner);
-            border: 1px solid var(--accent-blue);
+            border: 1px solid var(--accent-gold);
             padding: 18px;
             border-radius: 8px;
             text-align: center;
@@ -513,20 +576,23 @@
 
         .result-box h2 {
             margin: 5px 0 0 0;
-            color: var(--accent-blue);
+            color: var(--accent-gold);
             font-size: 1.8rem;
+            font-family: var(--font-header);
         }
 
         /* Table Styles (Used in Calculators & Guides) */
         .table-wrapper { overflow-x: auto; margin-top: 15px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th, td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); }
-        th { color: var(--text-muted); font-weight: 500; background: var(--card-inner); }
-        td { color: var(--accent-blue); font-weight: 600; }
-        td.star-label { color: #fff; }
-        td.total-col { color: var(--text-muted); }
-        .total-row { display: flex; justify-content: space-between; margin-top: 16px; font-weight: bold; }
-        .total-row span:last-child { color: var(--accent-blue); font-size: 1.1rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; margin: 15px 0; }
+        th, td { padding: 12px 14px; border: 1px solid var(--border-color); }
+        th { color: var(--accent-gold); font-weight: 700; background: var(--card-inner); font-family: var(--font-header); font-size: 0.85rem; }
+        td { color: var(--text-main); font-weight: 500; }
+        tr:nth-child(even) { background: rgba(255,255,255,.03); }
+        tr:hover { background: rgba(212,175,55,.08); }
+        td.star-label { color: #fff; font-weight: bold; }
+        td.total-col { color: var(--accent-gold); font-weight: bold; }
+        .total-row { display: flex; justify-content: space-between; margin-top: 16px; font-weight: bold; font-family: var(--font-header); }
+        .total-row span:last-child { color: var(--accent-gold); font-size: 1.1rem; }
 
         /* Pet Stats Grid */
         .pet-stats-grid {
@@ -561,6 +627,7 @@
             color: #fff;
             font-size: 0.95rem;
             outline: none;
+            font-family: var(--font-body);
         }
 
         .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -575,7 +642,7 @@
             font-weight: 600;
             transition: all 0.2s;
         }
-        .filter-pill.active, .filter-pill:hover { background: var(--accent-blue); color: #000; border-color: var(--accent-blue); }
+        .filter-pill.active, .filter-pill:hover { background: var(--accent-gold); color: #000; border-color: var(--accent-gold); }
 
         .glossary-grid {
             display: grid;
@@ -594,15 +661,15 @@
             transition: border-color 0.2s;
         }
 
-        .term-card:hover { border-color: var(--accent-blue); }
+        .term-card:hover { border-color: var(--accent-gold); }
 
         .term-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-        .term-title { font-size: 1rem; font-weight: bold; color: #fff; }
+        .term-title { font-size: 1rem; font-weight: bold; color: var(--accent-gold); font-family: var(--font-header); }
         .cat-tag { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; text-transform: uppercase; white-space: nowrap; }
         .cat-tag.combat { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
-        .cat-tag.alliance { background: rgba(56, 189, 248, 0.15); color: #93c5fd; }
+        .cat-tag.alliance { background: rgba(212, 175, 55, 0.15); color: #fde68a; }
         .cat-tag.economy { background: rgba(34, 197, 94, 0.15); color: #86efac; }
-        .cat-tag.events { background: rgba(245, 158, 11, 0.15); color: #fde047; }
+        .cat-tag.events { background: rgba(168, 85, 247, 0.15); color: #ddd6fe; }
 
         /* Code Cards & Profile Lookup */
         .code-card {
@@ -617,30 +684,37 @@
         }
 
         .copy-btn {
-            background-color: var(--success);
+            background-color: var(--accent-gold);
             color: #000;
             border: none;
             padding: 8px 15px;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
+            font-family: var(--font-body);
         }
+
+        .copy-btn:hover { background-color: var(--accent-gold-hover); }
 
         .badge {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             font-size: 0.75em;
             font-weight: bold;
         }
-        .badge.f2p { background-color: var(--success); color: #000; }
-        .badge.p2w { background-color: #a855f7; color: #fff; }
+        .badge.f2p { background-color: #14532d; color: #bbf7d0; }
+        .badge.p2w { background-color: #1e3a8a; color: #bfdbfe; }
 
         footer {
             margin-top: 40px;
+            padding: 30px;
             text-align: center;
             font-size: 0.85em;
             color: var(--text-muted);
+            border-top: 2px solid var(--accent-gold);
+            background-color: var(--sidebar-bg);
+            border-radius: 8px;
         }
 
         /* Responsive Breakpoints */
@@ -657,7 +731,7 @@
 <!-- SVG Half Star Gradient Definition -->
 <svg width="0" height="0" style="position:absolute;">
   <linearGradient id="half-grad-hub" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="50%" stop-color="#f59e0b" />
+    <stop offset="50%" stop-color="#d4af37" />
     <stop offset="50%" stop-color="#374151" />
   </linearGradient>
 </svg>
@@ -681,15 +755,23 @@
         <a class="nav-item" onclick="navigate('calculators', this)">🧮 Calculators</a>
         <a class="nav-item" onclick="navigate('glossary', this)">📖 Game Glossary</a>
 
+        <div class="nav-group-title">Alliance Info</div>
+        <a class="nav-item" onclick="navigate('ven-notices', this)">📢 Alliance Notices</a>
+        <a class="nav-item" onclick="navigate('rank-structure', this)">👑 Rank Structure</a>
+
         <div class="nav-group-title">Alliance Guides</div>
         <a class="nav-item" onclick="navigate('alliance-battles', this)">⚔️ Alliance Battles</a>
-        <a class="nav-item" onclick="navigate('alliance-championship', this)">🏆 Alliance Championship</a>
+        <a class="nav-item" onclick="navigate('bear-trap', this)">🐻 Bear Trap Guide</a>
+        <a class="nav-item" onclick="navigate('viking-attack', this)">🛡️ Viking Attack Guide</a>
+        <a class="nav-item" onclick="navigate('swordland-showdown', this)">🗡️ Swordland Showdown</a>
         <a class="nav-item" onclick="navigate('alliance-mobilization', this)">📋 Alliance Mobilization</a>
+        <a class="nav-item" onclick="navigate('alliance-championship', this)">🏆 Alliance Championship</a>
 
         <div class="nav-group-title">Database & Tools</div>
+        <a class="nav-item" onclick="navigate('gen-1-heroes', this)">🦸 Gen 1 Heroes Tier</a>
         <a class="nav-item" onclick="navigate('gifts', this)">🎁 Gift Codes</a>
         <a class="nav-item" onclick="navigate('player-search', this)">🔍 Player Lookup</a>
-        <a class="nav-item" onclick="navigate('heroes', this)">🛡️ Heroes & Tier List</a>
+        <a class="nav-item" onclick="navigate('heroes', this)">🛡️ Heroes API Roster</a>
         <a class="nav-item" onclick="navigate('kvk-history', this)">⚔️ KvK History</a>
     </nav>
 </aside>
@@ -700,7 +782,7 @@
     <!-- Top Kingdom Live Status Header -->
     <div class="top-status-bar">
         <div>
-            <h2 style="font-size: 1.3rem; color: #fff;">Kingdom #2166 Live Overview</h2>
+            <h2 style="font-size: 1.3rem;">Kingdom #2166 Live Overview</h2>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & alliance operations center</p>
         </div>
         <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166 | Syncing...</div>
@@ -845,7 +927,7 @@
                         </div>
                         <div class="pet-stat-card">
                             <small style="color: var(--text-muted);">Advanced Food (1k XP)</small>
-                            <h4 id="pet-food-adv" style="margin: 5px 0 0 0; color: var(--accent-blue);">0</h4>
+                            <h4 id="pet-food-adv" style="margin: 5px 0 0 0; color: var(--accent-gold);">0</h4>
                         </div>
                     </div>
                     <p id="pet-milestone-info" style="font-size: 0.85rem; color: var(--warning); margin-top: 12px;"></p>
@@ -925,234 +1007,384 @@
         <div id="glossary-grid" class="glossary-grid"></div>
     </section>
 
-    <!-- Guide Module A: Alliance Battles -->
+    <!-- Module 4: Alliance Notices -->
+    <section id="ven-notices" class="tab-content">
+        <div class="card guide-content">
+            <h2>📢 Alliance Rules & Guidelines</h2>
+            <p>Welcome to <strong>VEN</strong>! 💙<br>Our goal is to build a strong, friendly, and active alliance where everyone enjoys the game and grows together.</p>
+
+            <h2>🤝 Respect & Teamwork</h2>
+            <ul>
+                <li>Treat all alliance members with respect.</li>
+                <li>No drama, harassment, or toxic behavior.</li>
+                <li>Follow leadership instructions during alliance events and wars.</li>
+                <li>Help fellow members whenever possible.</li>
+                <li>Most importantly... <strong>Have Fun! 🎮</strong></li>
+            </ul>
+
+            <h2>📅 Activity</h2>
+            <ul>
+                <li>Stay active and participate in alliance events.</li>
+                <li>If you'll be inactive for an extended period, please inform the Leadership Team.</li>
+                <li>Contribute to the alliance whenever possible.</li>
+            </ul>
+
+            <h2>⚔️ Combat Rules</h2>
+            <h3>Alliance Members</h3>
+            <ul>
+                <li>Do NOT attack alliance members in the Arena.</li>
+            </ul>
+
+            <h3>NAP Rules</h3>
+            <ul>
+                <li>Do NOT scout or attack members of NAP alliances or their academy alliances.</li>
+            </ul>
+
+            <h3>Non-NAP Rules</h3>
+            <ul>
+                <li>Maximum 3 city hits per player.</li>
+                <li>No rallies on cities.</li>
+            </ul>
+
+            <h3>Forbidden</h3>
+            <ul>
+                <li>Do NOT attack alliance banners or buildings.</li>
+                <li>Unsportsmanlike behavior will not be tolerated.</li>
+            </ul>
+
+            <h2>🛡️ Current NAP Alliances</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Alliance</th><th>Academy</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>WIN</td><td>win</td></tr>
+                        <tr><td>DNY</td><td>DnY</td></tr>
+                        <tr><td>OTO</td><td>oto</td></tr>
+                        <tr><td>VEN</td><td>-</td></tr>
+                        <tr><td>DBR</td><td>dBr</td></tr>
+                        <tr><td>GMS</td><td>-</td></tr>
+                        <tr><td>GOT</td><td>BFM</td></tr>
+                        <tr><td>KFC</td><td>-</td></tr>
+                        <tr><td>DEO</td><td>-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <blockquote>A strong alliance isn't built by power alone—it's built by teamwork, respect, and helping each other grow.</blockquote>
+        </div>
+    </section>
+
+    <!-- Module 5: Rank Structure -->
+    <section id="rank-structure" class="tab-content">
+        <div class="card guide-content">
+            <h2>👑 Alliance Rank Structure</h2>
+            <p>Our ranks are based on <strong>activity, responsibility, and contribution</strong>. Every role is important in helping our alliance grow stronger together.</p>
+
+            <h2>👑 R5 — Alliance Leader</h2>
+            <ul>
+                <li>Leads the alliance and sets its direction.</li>
+                <li>Makes major alliance decisions.</li>
+                <li>Oversees strategy and diplomacy.</li>
+            </ul>
+
+            <h2>🛡️ R4 — Leadership Team</h2>
+            <ul>
+                <li>Supports the Alliance Leader.</li>
+                <li>Assists with recruitment, member management, event coordination, and alliance development.</li>
+                <li>Helps maintain a positive and active community.</li>
+            </ul>
+
+            <h2>⚔️ R3 — Veterans</h2>
+            <ul>
+                <li>Experienced and trusted members.</li>
+                <li>Lead rallies during Bear Trap and other alliance events.</li>
+                <li>Guide newer members and provide gameplay support.</li>
+            </ul>
+
+            <h2>🤝 R2 — Members</h2>
+            <ul>
+                <li>Active members who participate in alliance events.</li>
+                <li>Continue growing, learning, and contributing to the alliance.</li>
+                <li>Join rallies and support alliance activities.</li>
+            </ul>
+
+            <h2>🌱 R1 — Recruits</h2>
+            <ul>
+                <li>New members getting familiar with the alliance.</li>
+                <li>Members inactive for more than <strong>2 days</strong> may be moved to R1.</li>
+                <li>Continued inactivity without notice may result in removal to make room for active players.</li>
+            </ul>
+
+            <blockquote>Every rank plays an important role in our success. Stay active, support one another, and let's continue building a stronger alliance together! 💪</blockquote>
+        </div>
+    </section>
+
+    <!-- Module 6: Bear Trap Guide -->
+    <section id="bear-trap" class="tab-content">
+        <div class="card guide-content">
+            <h2>🐻 Bear Trap Guide</h2>
+            <p>Bear Trap is an alliance event where members work together to defeat the Bear by hosting and joining rallies. The more damage your alliance deals, the better the rewards for everyone.</p>
+
+            <h2>🎁 Rewards</h2>
+            <ul>
+                <li>Personal rewards based on the damage you deal.</li>
+                <li>Alliance milestone rewards as the alliance reaches higher Bear levels.</li>
+                <li>Better performance means better chests and more rewards for everyone.</li>
+            </ul>
+
+            <h2>⚔️ Rally Roles</h2>
+            <h3>👑 R5 / 🛡️ R4 / ⚔️ R3</h3>
+            <ul>
+                <li>Start (host) rallies.</li>
+                <li>Hosting rallies gives more personal points because your strongest heroes lead the attack.</li>
+                <li>More rallies = More alliance damage = Better rewards for everyone.</li>
+            </ul>
+
+            <h3>🤝 R2 / 🌱 R1</h3>
+            <ul>
+                <li>Join rallies started by R3, R4 and R5.</li>
+                <li>Help fill rallies quickly to maximize alliance damage.</li>
+            </ul>
+
+            <h2>🐻 Bear Trap Rules</h2>
+            <h3>🔵 Rally Host</h3>
+            <ul>
+                <li>Use your <strong>best 3 heroes</strong>.</li>
+                <li><strong>No blue heroes.</strong></li>
+            </ul>
+
+            <h3>🔵 Rally Joiners</h3>
+            <p>Use <strong>ONE</strong> of these heroes as your first hero:</p>
+            <ul>
+                <li>Amadeus + Hero + Hero</li>
+                <li>Chenko + Hero + Hero</li>
+                <li>Yeonwoo + Hero + Hero</li>
+                <li>Amane + Hero + Hero</li>
+            </ul>
+            <p>If you don't have any of these heroes, <strong>join without heroes.</strong></p>
+
+            <h3>🔴 Important</h3>
+            <ul>
+                <li>Rally hosts should remove members using the wrong heroes.</li>
+                <li>Joiners can simply rejoin with the correct setup.</li>
+            </ul>
+
+            <blockquote>💙 Let's work together, fill rallies quickly, and maximize everyone's rewards!</blockquote>
+        </div>
+    </section>
+
+    <!-- Module 7: Viking Attack Guide -->
+    <section id="viking-attack" class="tab-content">
+        <div class="card guide-content">
+            <h2>🛡️ Viking Attack Guide</h2>
+            <p>Viking Attack is a <strong>20-wave alliance PvE event</strong> where Vikings attack alliance members and the Alliance Headquarters (HQ). Success depends on teamwork, proper reinforcements, and following the battle strategy.</p>
+            <p>Unlike many events, <strong>you earn most of your points by reinforcing other members</strong>, not by defending your own city.</p>
+
+            <h2>🎁 Rewards</h2>
+            <ul>
+                <li>🏆 Personal Ranking Rewards</li>
+                <li>🎁 Alliance Milestone Rewards</li>
+                <li>💎 Resources and valuable items</li>
+                <li>📈 Event Points based on your contribution</li>
+            </ul>
+
+            <h2>🌊 Wave Structure</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Wave</th><th>Target</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1 – 6</td><td>All Members</td></tr>
+                        <tr><td>7</td><td>Online Members Only</td></tr>
+                        <tr><td>8 – 9</td><td>All Members</td></tr>
+                        <tr><td>10</td><td>Alliance HQ</td></tr>
+                        <tr><td>11 – 13</td><td>All Members</td></tr>
+                        <tr><td>14</td><td>Online Members Only</td></tr>
+                        <tr><td>15 – 16</td><td>All Members</td></tr>
+                        <tr><td>17</td><td>Online Members Only</td></tr>
+                        <tr><td>18 – 19</td><td>All Members</td></tr>
+                        <tr><td>20</td><td>Alliance HQ</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>🤝 Reinforcement Strategy</h2>
+            <ul>
+                <li>Send <strong>Infantry only</strong> when reinforcing members.</li>
+                <li>Do <strong>NOT</strong> send Archers when reinforcing players. Archers do not earn reinforcement points.</li>
+            </ul>
+
+            <h2>🏰 HQ Defense (Rounds 10 & 20)</h2>
+            <ul>
+                <li>Reinforce the Alliance HQ immediately.</li>
+                <li>Use your <strong>best heroes</strong>.</li>
+                <li>Send <strong>100% Infantry & Cavalry</strong> (or follow leadership instructions).</li>
+                <li>Save a troop formation of approximately <strong>43K highest-tier troops</strong> before the event.</li>
+            </ul>
+
+            <blockquote><strong>💙 Victory Through Teamwork</strong><br><br>Reinforce • Defend • Coordinate • Conquer! ⚔️</blockquote>
+        </div>
+    </section>
+
+    <!-- Module 8: Swordland Showdown -->
+    <section id="swordland-showdown" class="tab-content">
+        <div class="card guide-content">
+            <h2>⚔️ Swordland Showdown</h2>
+            <p><strong>Fight. Capture. Defend. Dominate.</strong></p>
+            <p>Swordland Showdown is a large-scale PvP battlefield where alliances compete to capture objectives, defeat enemies, and earn valuable rewards.</p>
+
+            <h2>📋 Pre-Event Checklist</h2>
+            <ul>
+                <li>Select <strong>ONE Legion</strong> (Legion 1 or Legion 2) and tap <strong>Vote</strong> under Deployment.</li>
+                <li>For the other Legion, choose <strong>Abstention</strong>.</li>
+                <li>Only register if you can participate for the full event.</li>
+            </ul>
+
+            <h2>⭐ Quick Tips & Tactics</h2>
+            <ul>
+                <li>Reach <strong>180,000 Personal Points</strong> to unlock top personal rewards.</li>
+                <li>Defend assigned objectives (Sanctums, Sword Shrine, Royal Stables, Bell Tower).</li>
+                <li>Join rallies using <strong>Chenko</strong>.</li>
+            </ul>
+
+            <h2>⚡ F2P Survival Tricks</h2>
+            <h3>❤️ Free Hospital Trick</h3>
+            <ul>
+                <li>No permanent troop deaths occur during Swordland.</li>
+                <li>If your hospital fills up, leave the battlefield and your troops heal instantly.</li>
+                <li>Re-enter after the 12-minute cooldown.</li>
+            </ul>
+
+            <h3>🏕️ Encampment Trick</h3>
+            <ul>
+                <li>Send all troops to an Encampment and leave your city empty. Your troops remain safe!</li>
+            </ul>
+
+            <blockquote><strong>💙 Strong players win battles. Strong alliances win wars.</strong><br><br>Fight Smart ⚔️ • Defend Together 🛡️ • Capture Objectives 🏰 • Reach 180K 🏆</blockquote>
+        </div>
+    </section>
+
+    <!-- Module 9: Alliance Battles -->
     <section id="alliance-battles" class="tab-content">
         <div class="card guide-content">
             <h2>⚔️ Alliance Battle</h2>
             <p><strong>Sanctuaries • Fortresses • Outposts</strong></p>
-            <p>Alliance Battles are large-scale PvP events where teamwork, coordination and strategy are far more important than individual power. Winning these battles strengthens both you and the alliance.</p>
+            <p>Alliance Battles are large-scale PvP events where teamwork, coordination and strategy are far more important than individual power.</p>
 
-            <h2>🏰 Why Alliance Battles Matter</h2>
-            <ul>
-                <li>🏆 Valuable personal and alliance rewards.</li>
-                <li>💎 Alliance Honor and event rewards.</li>
-                <li>📈 Strategic buffs and map control.</li>
-                <li>👑 Increased alliance influence across the kingdom.</li>
-                <li>💀 PvP experience and battle practice.</li>
-                <li>🤝 Stronger teamwork and rally coordination.</li>
-            </ul>
-
-            <blockquote>Every member's participation contributes to the alliance's success.</blockquote>
-
-            <h2>⚔️ Attacking</h2>
-            <p>Use your <strong>best three heroes</strong> and focus on offensive hero combinations.</p>
-
+            <h2>⚔️ Attacking & Defending</h2>
             <h3>🤝 Rally Join Heroes</h3>
-            <p>Use one of these heroes as your <strong>first (left) hero</strong>:</p>
-            <ul>
-                <li>Chenko — Lethality %</li>
-                <li>Yeonwoo — Lethality %</li>
-                <li>Amane — Attack %</li>
-                <li>Amadeus — Lethality %</li>
-            </ul>
-            <p>If you don't own any of these heroes, <strong>join without heroes.</strong></p>
+            <p>Use one of these heroes as your <strong>first (left) hero</strong>: Chenko, Yeonwoo, Amane, Amadeus. If you don't own any, join without heroes.</p>
 
-            <h3>Recommended Troop Formation</h3>
+            <h3>Recommended Troop Formations</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr><th>Infantry</th><th>Cavalry</th><th>Archers</th></tr>
+                        <tr><th>Type</th><th>Attacking</th><th>Garrison Defense</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>50%</td><td>20%</td><td>30%</td></tr>
+                        <tr><td>Infantry</td><td>50%</td><td>70%</td></tr>
+                        <tr><td>Cavalry</td><td>20%</td><td>30%</td></tr>
+                        <tr><td>Archers</td><td>30%</td><td>0%</td></tr>
                     </tbody>
                 </table>
             </div>
 
-            <h2>🛡️ Defending & Garrison</h2>
-            <p>When reinforcing a building, use one of these heroes as your <strong>first (left) hero</strong>:</p>
-            <ul>
-                <li>Howard — Defense</li>
-                <li>Gordon — Health</li>
-                <li>Saul — Defense & Health</li>
-            </ul>
-
-            <h3>Recommended Troop Formation</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr><th>Infantry</th><th>Cavalry</th><th>Archers</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>70%</td><td>30%</td><td>0%</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>❤️ Healing Troops</h2>
-            <ul>
-                <li>Heal troops immediately after battles.</li>
-                <li>Heal in small batches (under 500 troops).</li>
-                <li>Request Alliance Help every time.</li>
-                <li>Repeat until all troops are fully healed.</li>
-            </ul>
-
-            <h2>⚠️ Battle Guidelines</h2>
-            <ul>
-                <li>📍 Teleport near the battle only when instructed by R5 or R4.</li>
-                <li>🏕️ Move into alliance territory before the battle begins.</li>
-                <li>🚩 Leave the closest teleport spots for designated rally leaders.</li>
-                <li>⚔️ Rally leaders will be assigned before each battle.</li>
-                <li>🤝 Everyone else should focus on joining rallies quickly.</li>
-                <li>🛡️ Use Level 7 troops or higher whenever possible.</li>
-                <li>🦸 Always use the recommended heroes.</li>
-                <li>🔄 If removed from a rally because of incorrect heroes, simply update your march and rejoin.</li>
-                <li>🚫 Do not launch solo attacks unless instructed.</li>
-                <li>🎯 Follow all R5/R4 instructions throughout the battle.</li>
-            </ul>
-
-            <blockquote>
-                <strong>💙 Teamwork Wins Battles</strong><br><br>
-                A strong alliance isn't built by individual power—it's built by teamwork, communication and coordination.<br><br>
-                Fight Smart ⚔️ • Rally Fast 🤝 • Heal Quickly ❤️ • Win Together 🏆
-            </blockquote>
+            <blockquote>Fight Smart ⚔️ • Rally Fast 🤝 • Heal Quickly ❤️ • Win Together 🏆</blockquote>
         </div>
     </section>
 
-    <!-- Guide Module B: Alliance Championship -->
+    <!-- Module 10: Alliance Championship -->
     <section id="alliance-championship" class="tab-content">
         <div class="card guide-content">
             <h2>🏆 Alliance Championship</h2>
             <p><strong>Plan. Register. Win.</strong></p>
-            <p>Alliance Championship is a strategic PvP event where proper registration is just as important as troop strength. Following the alliance strategy gives us the best chance of victory.</p>
 
-            <h2>📋 Registration</h2>
+            <h2>📋 Registration Strategy</h2>
             <ul>
-                <li>✅ Register in the <strong>Middle Lane ONLY</strong>.</li>
-                <li>🚫 Do <strong>NOT</strong> register in the Left or Right Lane unless instructed by Leadership.</li>
-                <li>💡 Leadership will reorganize players after registration to create the strongest possible lineup.</li>
+                <li>Register in the <strong>Middle Lane ONLY</strong>.</li>
+                <li>Do <strong>NOT</strong> register in Left/Right Lanes unless instructed. Matchmaking uses top 20 combatants per lane, allowing leadership to re-distribute players strategically.</li>
             </ul>
 
-            <blockquote>
-                <strong>Why Middle Lane?</strong><br><br>
-                Matchmaking is based on the <strong>Top 20 combatants in each lane</strong>. Registering everyone in the Middle allows Leadership to redistribute players strategically across all three lanes.
-            </blockquote>
-
-            <h2>⚔️ Battle Setup</h2>
-            <h3>🦸 Heroes</h3>
-            <p>Use your <strong>best 3 heroes</strong>.</p>
-
-            <h3>🛡️ Recommended Formation</h3>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr><th>Troop Type</th><th>Percentage</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>🛡️ Infantry</td><td>50%</td></tr>
-                        <tr><td>🐎 Cavalry</td><td>20%</td></tr>
-                        <tr><td>🏹 Archers</td><td>30%</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <p>Update your troop formation before every Championship as you unlock stronger troops, heroes, or research upgrades.</p>
-
-            <h2>💙 VEN Tips</h2>
-            <ul>
-                <li>💡 Register in the <strong>Middle Lane</strong> and let Leadership handle lane assignments.</li>
-                <li>💡 Update your march whenever you unlock stronger heroes or troops.</li>
-                <li>💡 If you're unsure about your formation, ask an R4 before registration.</li>
-                <li>💡 Check your heroes and troop presets before the battle begins.</li>
-            </ul>
-
-            <blockquote>
-                <strong>Preparation wins battles before they begin.</strong><br><br>
-                Register Smart 🏆 • Follow Leadership 🤝 • Fight Together ⚔️
-            </blockquote>
+            <blockquote>Register Smart 🏆 • Follow Leadership 🤝 • Fight Together ⚔️</blockquote>
         </div>
     </section>
 
-    <!-- Guide Module C: Alliance Mobilization -->
+    <!-- Module 11: Alliance Mobilization -->
     <section id="alliance-mobilization" class="tab-content">
         <div class="card guide-content">
             <h2>📋 Alliance Mobilization</h2>
-            <p><strong>Complete missions. Earn points. Unlock rewards.</strong></p>
-            <p>Alliance Mobilization is a team event where members complete missions to earn points for themselves and the alliance. The more points earned, the better the milestone rewards for everyone.</p>
-
-            <h2>📋 Before the Event</h2>
-            <ul>
-                <li>✅ Save Construction, Research and Training Speedups.</li>
-                <li>✅ Delay completing Construction and Research until the event begins.</li>
-                <li>✅ Keep enough resources available to complete missions.</li>
-                <li>✅ Refresh low-value missions and prioritize high-point tasks.</li>
-            </ul>
-
-            <h2>⭐ Quick Tips</h2>
-            <ul>
-                <li>🎯 Complete high-value missions.</li>
-                <li>🔄 Refresh poor-value missions.</li>
-                <li>⏳ Save speedups for the event.</li>
-                <li>🏗️ Time your research and construction.</li>
-                <li>🏆 Reach every personal milestone.</li>
-                <li>🤝 Every member should contribute.</li>
-            </ul>
-
-            <h2>🎁 Rewards</h2>
-            <h3>Personal Rewards</h3>
-            <ul>
-                <li>⏱️ Speedups</li>
-                <li>💎 Gems</li>
-                <li>🪵 Resources</li>
-                <li>🧱 Building Materials</li>
-                <li>🦸 Hero Upgrade Materials</li>
-                <li>📦 Personal Milestone Chests</li>
-                <li>🏅 Event Ranking Rewards</li>
-            </ul>
-
-            <h3>Alliance Rewards</h3>
-            <ul>
-                <li>📦 Alliance Milestone Chests</li>
-                <li>⏱️ Speedups</li>
-                <li>💎 Gems</li>
-                <li>🪵 Resources</li>
-                <li>🦸 Hero Upgrade Materials</li>
-            </ul>
+            <p>Complete missions, earn points, and unlock rewards for the alliance.</p>
 
             <h2>📋 Best Mission Types</h2>
-            <p>Prioritize missions that provide the highest points for the least effort:</p>
             <ul>
-                <li>🏗️ Construction</li>
-                <li>🔬 Research</li>
-                <li>⚔️ Troop Training</li>
-                <li>🌲 Resource Gathering</li>
-                <li>🐻 Beast Hunting</li>
+                <li>Construction, Research, Troop Training, Resource Gathering, Beast Hunting.</li>
+                <li>Save Speedups specifically for this event!</li>
             </ul>
 
-            <h2>🚫 Common Mistakes</h2>
-            <ul>
-                <li>❌ Completing Construction or Research before the event starts.</li>
-                <li>❌ Accepting low-point missions.</li>
-                <li>❌ Letting missions expire.</li>
-                <li>❌ Using speedups on poor-value tasks.</li>
-                <li>❌ Ignoring easy gathering missions.</li>
-            </ul>
-
-            <h2>💙 VEN Tips</h2>
-            <ul>
-                <li>💡 Save Construction, Research and Training speedups specifically for Alliance Mobilization whenever possible.</li>
-                <li>💡 If you're unsure whether a mission is worth completing, ask an R4 before spending resources or speedups.</li>
-                <li>💡 If you're pushing for leaderboard rankings, consider saving your speedups for the final hours.</li>
-                <li>💡 Even if you can't reach the top rankings, completing your personal milestones helps the entire alliance unlock better rewards.</li>
-            </ul>
-
-            <blockquote>
-                <strong>Every point matters.</strong><br><br>
-                Complete Missions 📋 • Earn Points 🏆 • Help the Alliance 🤝
-            </blockquote>
+            <blockquote>Complete Missions 📋 • Earn Points 🏆 • Help the Alliance 🤝</blockquote>
         </div>
     </section>
 
-    <!-- Module 4: Active Gift Codes -->
+    <!-- Module 12: Gen 1 Heroes Tier List -->
+    <section id="gen-1-heroes" class="tab-content">
+        <div class="card guide-content">
+            <h2>🦸 Generation 1 Heroes Tier List</h2>
+            <p>Heroes are the backbone of every march. Choosing the right heroes and investing your resources wisely will significantly improve performance.</p>
+
+            <blockquote>
+                <strong>💡 F2P Golden Rule:</strong> Invest almost everything into your Top 3 heroes: <strong>🥇 Howard • 🥇 Saul • 🥇 Jabel</strong>. Secondary heroes stay at Level 0–1 Gear until your main march is complete.
+            </blockquote>
+
+            <h2>🏹 Archer Heroes</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Hero</th><th>Tier</th><th>Best For</th><th>VEN Tip</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Saul</td><td>⭐ S</td><td>Main March, Bear Trap, PvP, Swordland</td><td>Top 3 Investment</td></tr>
+                        <tr><td>Yeonwoo</td><td>⭐ A</td><td>Secondary March, Bear Trap</td><td>Great Drill Camp Hero</td></tr>
+                        <tr><td>Quinn</td><td>⭐ B</td><td>Rally Joiner, Support</td><td>Excellent Support</td></tr>
+                        <tr><td>Diana</td><td>⭐ C</td><td>Beast Hunting</td><td>Utility Only</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>🐴 Cavalry Heroes</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Hero</th><th>Tier</th><th>Best For</th><th>VEN Tip</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Jabel</td><td>⭐ S</td><td>Main March, PvP, Alliance Battles</td><td>Top 3 Investment</td></tr>
+                        <tr><td>Chenko</td><td>⭐ A</td><td>Rally Joining, Bear Trap, Swordland</td><td>Best Rally Join Hero</td></tr>
+                        <tr><td>Amane</td><td>⭐ B</td><td>Secondary March</td><td>Good Filler Hero</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>🛡️ Infantry Heroes</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Hero</th><th>Tier</th><th>Best For</th><th>VEN Tip</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Amadeus</td><td>👑 God</td><td>End Game PvP</td><td>Heavy Spenders Only</td></tr>
+                        <tr><td>Howard</td><td>⭐ S</td><td>Main March, Garrison, Fortress</td><td>Top 3 Investment</td></tr>
+                        <tr><td>Gordon</td><td>⭐ A</td><td>Garrison, Fortress</td><td>Defensive Specialist</td></tr>
+                        <tr><td>Helga</td><td>⭐ B</td><td>Arena, PvP</td><td>Lower Priority</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Module 13: Gift Codes -->
     <section id="gifts" class="tab-content">
         <div class="card">
             <h2>Active Redeem Gift Codes</h2>
@@ -1161,7 +1393,7 @@
         </div>
     </section>
 
-    <!-- Module 5: Player Lookup -->
+    <!-- Module 14: Player Lookup -->
     <section id="player-search" class="tab-content">
         <div class="card">
             <h2>Player Profile Search</h2>
@@ -1175,16 +1407,16 @@
         </div>
     </section>
 
-    <!-- Module 6: Hero Tier List -->
+    <!-- Module 15: Heroes API List -->
     <section id="heroes" class="tab-content">
         <div class="card">
-            <h2>Hero Roster & Tier List</h2>
+            <h2>Hero Roster & Tier List (API)</h2>
             <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 15px;">Hero generations and combat specialty roles.</p>
             <div id="heroes-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;">Loading heroes data...</div>
         </div>
     </section>
 
-    <!-- Module 7: KvK History -->
+    <!-- Module 16: KvK History -->
     <section id="kvk-history" class="tab-content">
         <div class="card">
             <h2>KvK Match History</h2>
@@ -1194,7 +1426,7 @@
     </section>
 
     <footer>
-        [VEN] Alliance Command Center • Data dynamically synced via KingshotPro & KingShot.net APIs.
+        [VEN] Alliance Command Center © 2026 • Data dynamically synced via KingshotPro & KingShot.net APIs.
     </footer>
 </main>
 
@@ -1338,10 +1570,10 @@
         badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}${eventsText}`;
 
         summaryContainer.innerHTML = `
-            <div class="card" style="border-left: 4px solid var(--accent-blue);">
-                <h3 style="margin:0;">Kingdom #${MY_KINGDOM_ID} Live Status</h3>
+            <div class="card" style="border-left: 4px solid var(--accent-gold);">
+                <h3 style="margin:0; font-family: var(--font-header);">Kingdom #${MY_KINGDOM_ID} Live Status</h3>
                 <p style="margin: 5px 0 0 0; color: var(--text-muted);">
-                    Server Opened: <strong>07-06-2026</strong> | Server Age: <strong style="color: var(--accent-blue);">${ageDays} Days Old</strong>
+                    Server Opened: <strong>07-06-2026</strong> | Server Age: <strong style="color: var(--accent-gold);">${ageDays} Days Old</strong>
                 </p>
             </div>
         `;
@@ -1425,13 +1657,13 @@
             }
 
             const gradId = `${containerId}-grad-${i}`;
-            const fillStyle = fillPercent === 100 ? '#f59e0b' : (fillPercent === 0 ? '#374151' : `url(#${gradId})`);
+            const fillStyle = fillPercent === 100 ? '#d4af37' : (fillPercent === 0 ? '#374151' : `url(#${gradId})`);
 
             const svgHtml = `
                 <svg class="star-icon ${fillPercent === 100 ? 'filled' : ''}" viewBox="0 0 24 24" onclick="${onClickStarHandlerName}(${i})">
                     <defs>
                         <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="${fillPercent}%" stop-color="#f59e0b" />
+                            <stop offset="${fillPercent}%" stop-color="#d4af37" />
                             <stop offset="${fillPercent}%" stop-color="#374151" />
                         </linearGradient>
                     </defs>
@@ -1515,7 +1747,7 @@
             totalShards += FLAT_COSTS[i];
         }
 
-        resultBox.style.color = "var(--accent-blue)";
+        resultBox.style.color = "var(--accent-gold)";
         resultBox.innerText = `Required Shards: ${totalShards.toLocaleString()} Shards`;
     }
 
@@ -1532,7 +1764,7 @@
             step++;
         }
 
-        resultBox.style.color = "var(--accent-blue)";
+        resultBox.style.color = "var(--accent-gold)";
         resultBox.innerText = `Reachable Level: ${stepToText(step)} (Remaining Shards: ${rem})`;
     }
 
@@ -1737,7 +1969,7 @@
         container.innerHTML = codes.map(c => `
             <div class="code-card">
                 <div>
-                    <strong style="font-size:1.2rem; color:var(--accent-blue);">${c.code}</strong>
+                    <strong style="font-size:1.2rem; color:var(--accent-gold); font-family: var(--font-header);">${c.code}</strong>
                     <br><small style="color:var(--text-muted);">Expires: ${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : 'No expiration'}</small>
                 </div>
                 <button class="copy-btn" onclick="copyCode('${c.code}')">Copy Code</button>
@@ -1767,17 +1999,17 @@
         if (data && data.status === 'success' && data.data) {
             const p = data.data;
             const avatarHtml = p.profilePhoto 
-                ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-blue); object-fit: cover;">` 
+                ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-gold); object-fit: cover;">` 
                 : `<div style="width: 75px; height: 75px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">👑</div>`;
 
             container.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 20px; background: var(--card-inner); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); flex-wrap: wrap;">
                     ${avatarHtml}
                     <div>
-                        <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 1.3rem;">${p.name || 'Unknown Player'}</h3>
+                        <h3 style="margin: 0 0 6px 0; color: var(--accent-gold); font-family: var(--font-header); font-size: 1.3rem;">${p.name || 'Unknown Player'}</h3>
                         <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-muted);"><strong>Player ID:</strong> ${p.playerId}</p>
                         <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-muted);"><strong>Kingdom:</strong> #${p.kingdom}</p>
-                        <p style="margin: 4px 0; font-size: 1rem; color: var(--accent-blue);"><strong>Town Center Level:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
+                        <p style="margin: 4px 0; font-size: 1rem; color: var(--text-main);"><strong>Town Center Level:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
                     </div>
                 </div>
             `;
@@ -1794,7 +2026,7 @@
 
             container.innerHTML = data.heroes.map(hero => `
                 <div class="card" style="margin-bottom: 0;">
-                    <h3 style="font-size: 1.1rem; color: var(--accent-blue);">${hero.name}</h3>
+                    <h3 style="font-size: 1.1rem; color: var(--accent-gold);">${hero.name}</h3>
                     <p style="margin-top: 4px;"><span class="badge ${hero.f2p ? 'f2p' : 'p2w'}">${hero.f2p ? 'F2P' : 'P2W / VIP'}</span> <small style="color: var(--text-muted);">Gen ${hero.gen}</small></p>
                     <p style="margin: 6px 0 2px 0; font-size: 0.85rem;"><strong>Rally:</strong> ${hero.rally || 'N/A'}</p>
                     <p style="margin: 2px 0; font-size: 0.85rem;"><strong>Garrison:</strong> ${hero.garrison || 'N/A'}</p>
@@ -1812,7 +2044,7 @@
         if (data && data.status === 'success' && data.data && data.data.length > 0) {
             container.innerHTML = data.data.map(m => `
                 <div class="card" style="margin-bottom: 10px;">
-                    <h3 style="color: var(--accent-blue);">${m.kvk_title || 'KvK Match'}</h3>
+                    <h3 style="color: var(--accent-gold);">${m.kvk_title || 'KvK Match'}</h3>
                     <p><strong>Opponent:</strong> Kingdom #${m.kingdom_b === MY_KINGDOM_ID ? m.kingdom_a : m.kingdom_b}</p>
                     <p><strong>Prep Phase Winner:</strong> Kingdom #${m.prep_winner}</p>
                     <p><strong>Castle Winner:</strong> Kingdom #${m.castle_winner}</p>
