@@ -694,7 +694,7 @@
     }
 
 // 4. Player Lookup (/player-info com JSON-Wrapper para evitar bloqueios de CORS)
-    async function searchPlayer() {
+async function searchPlayer() {
         const id = document.getElementById('player-id-input').value.trim();
         const container = document.getElementById('player-result');
 
@@ -706,51 +706,43 @@
         container.innerHTML = '<p style="color: var(--text-secondary);">Searching player profile...</p>';
 
         const targetUrl = `https://kingshot.net/api/player-info?playerId=${encodeURIComponent(id)}`;
-        // Usamos o /get do AllOrigins que NUNCA é bloqueado por CORS
+        
+        // Tentativa de leitura via proxy AllOrigins
         const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
 
         try {
             const res = await fetch(proxyUrl);
-            
             if (res.ok) {
                 const wrapper = await res.json();
-                
                 if (wrapper && wrapper.contents) {
-                    // Descodificar a resposta JSON interna da API do Kingshot
                     const data = JSON.parse(wrapper.contents);
-                    console.log("Kingshot Player Data:", data);
-
+                    
                     if (data && data.status === 'success' && data.data) {
                         const p = data.data;
                         const avatarHtml = p.profilePhoto 
-                            ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover;">` 
-                            : `<div style="width: 70px; height: 70px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>`;
+                            ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover;">` 
+                            : `<div style="width: 75px; height: 75px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">👑</div>`;
 
                         container.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 18px; background: #0f172a; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 20px; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); flex-wrap: wrap;">
                                 ${avatarHtml}
                                 <div>
-                                    <h3 style="margin: 0 0 5px 0; color: #fff; font-size: 1.2rem;">${p.name || 'Unknown Player'}</h3>
-                                    <p style="margin: 3px 0; font-size: 0.9rem; color: var(--text-secondary);"><strong>Player ID:</strong> ${p.playerId}</p>
-                                    <p style="margin: 3px 0; font-size: 0.9rem; color: var(--text-secondary);"><strong>Kingdom:</strong> #${p.kingdom}</p>
-                                    <p style="margin: 3px 0; font-size: 0.95rem; color: var(--accent-color);"><strong>Town Center:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
+                                    <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 1.3rem;">${p.name || 'Unknown Player'}</h3>
+                                    <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Player ID:</strong> ${p.playerId}</p>
+                                    <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Kingdom:</strong> #${p.kingdom}</p>
+                                    <p style="margin: 4px 0; font-size: 1rem; color: var(--accent-color);"><strong>Town Center Level:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
                                 </div>
                             </div>
                         `;
-                        return;
-                    } else {
-                        // Se o ID não existir na base de dados deles
-                        const errorMsg = data.message || 'Player ID not found in Kingshot database.';
-                        container.innerHTML = `<p style="color: var(--danger-color);">${errorMsg}</p>`;
                         return;
                     }
                 }
             }
         } catch (e) {
-            console.error("Player lookup error:", e);
+            console.warn("API Lookup failed:", e);
         }
 
-        container.innerHTML = `<p style="color: var(--danger-color);">Unable to reach player database. Please check the Player ID and try again.</p>`;
+        container.innerHTML = `<p style="color: var(--danger-color);">Player ID not found or rate-limited by the server. Please check the ID and try again in 1 minute.</p>`;
     }
 
     // 5. Fetch Hero Tier List
