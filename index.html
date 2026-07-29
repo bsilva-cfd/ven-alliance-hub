@@ -474,22 +474,23 @@
 
     // Robust API Helper with Fallback Proxies
     async function fetchApi(targetUrl) {
-        const endpoints = [
-            targetUrl, // 1. Direct fetch
-            `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, // 2. AllOrigins
-            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}` // 3. CodeTabs
-        ];
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
 
-        for (const url of endpoints) {
-            try {
-                const res = await fetch(url);
-                if (res.ok) {
-                    const data = await res.json();
-                    return data;
+        try {
+            const res = await fetch(proxyUrl);
+            if (res.ok) {
+                const wrapper = await res.json();
+                if (wrapper && wrapper.contents) {
+                    // Tenta converter o conteúdo retornado para JSON
+                    try {
+                        return JSON.parse(wrapper.contents);
+                    } catch (err) {
+                        console.warn("Contents returned were not valid JSON:", wrapper.contents);
+                    }
                 }
-            } catch (e) {
-                console.warn(`Fetch failed for ${url}, trying next endpoint...`);
             }
+        } catch (e) {
+            console.warn(`Connection failed for ${targetUrl}:`, e);
         }
         return null;
     }
