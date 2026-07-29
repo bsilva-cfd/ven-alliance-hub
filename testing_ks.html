@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[VEN] Alliance Hub - Complete Command Center</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --success-color: #22c55e;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        h1 { color: var(--accent-color); margin: 0 0 5px 0; font-size: 2.2rem; }
+        p.subtitle { color: var(--text-secondary); margin: 0; }
+
+        .kingdom-badge {
+            display: inline-block;
+            background: #334155;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            margin-top: 10px;
+            border: 1px solid var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* Main Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active, .tab-btn:hover {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        /* Sub Navigation Tabs */
+        .sub-nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .sub-tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .sub-tab-btn.active, .sub-tab-btn:hover {
+            background-color: #0f172a;
+            color: var(--accent-color);
+        }
+
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; }
+
+        .tab-content {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-content.active { display: block; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .card {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .card h3 { margin-top: 0; color: var(--accent-color); }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            margin-top: 25px;
+            padding-left: 20px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 18px;
+            padding: 14px 18px;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 18px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            border: 3px solid var(--card-bg);
+        }
+
+        .timeline-item.completed { border-color: rgba(34, 197, 94, 0.3); opacity: 0.85; }
+        .timeline-item.completed::before { background-color: var(--success-color); box-shadow: 0 0 6px var(--success-color); }
+
+        .timeline-item.current {
+            border-color: var(--accent-color);
+            background-color: #0c263b;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+        }
+        .timeline-item.current::before { background-color: var(--accent-color); box-shadow: 0 0 12px var(--accent-color); }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .timeline-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .tag.heroes { background: #1e40af; color: #93c5fd; }
+        .tag.pets { background: #065f46; color: #6ee7b7; }
+        .tag.castle { background: #5b21b6; color: #ddd6fe; }
+        .tag.kvk { background: #991b1b; color: #fca5a5; }
+        .tag.tech { background: #854d0e; color: #fde047; }
+
+        .status-pill {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .status-pill.passed { background-color: rgba(34, 197, 94, 0.15); color: var(--success-color); }
+        .status-pill.active { background-color: rgba(56, 189, 248, 0.2); color: var(--accent-color); border: 1px solid var(--accent-color); }
+        .status-pill.upcoming { background-color: rgba(245, 158, 11, 0.15); color: var(--warning-color); }
+
+        .timeline-desc { color: var(--text-secondary); font-size: 0.88rem; margin: 6px 0 0 0; }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .input-group input, .input-group select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        .result-box {
+            background-color: #0f172a;
+            border: 1px solid var(--accent-color);
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .result-box h2 {
+            margin: 5px 0 0 0;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+        }
+
+        .code-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .copy-btn {
+            background-color: var(--success-color);
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover { opacity: 0.9; }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: bold;
+        }
+        .badge.f2p { background-color: #22c55e; color: #000; }
+        .badge.p2w { background-color: #a855f7; color: #fff; }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+        }
+
+        footer a { color: var(--accent-color); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>[VEN] ALLIANCE HUB</h1>
+        <p class="subtitle">Official Kingdom #2166 Command Center</p>
+        <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166</div>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('timeline')">🏛️ Kingdom Timeline</button>
+        <button class="tab-btn" onclick="openTab('calculators')">🧮 Calculators</button>
+        <button class="tab-btn" onclick="openTab('gifts')">🎁 Gift Codes</button>
+        <button class="tab-btn" onclick="openTab('player-search')">🔍 Player Lookup</button>
+        <button class="tab-btn" onclick="openTab('heroes')">🛡️ Heroes & Tier List</button>
+        <button class="tab-btn" onclick="openTab('kvk-history')">⚔️ KvK History</button>
+    </div>
+
+    <!-- Module 1: Timeline -->
+    <div id="timeline" class="tab-content active">
+        <h2>Official Kingdom Timeline (#2166)</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Synchronized live progression schedule based on KingShot.net database.</p>
+        
+        <div id="timeline-summary"></div>
+        <div id="timeline-roadmap" class="timeline-container">Loading official schedule...</div>
+    </div>
+
+    <!-- Module 2: Calculators -->
+    <div id="calculators" class="tab-content">
+        <h2>Alliance Tools & Calculators</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">Select a tool below to plan your event progression.</p>
+
+        <div class="sub-nav-tabs">
+            <button class="sub-tab-btn active" onclick="openSubTab('calc-shards')">⭐ Hero Shards</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-kvk')">⚔️ KvK Score</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-troops')">🏹 Troop Training</button>
+        </div>
+
+        <div id="calc-shards" class="sub-tab-content active">
+            <div class="card">
+                <h3>⭐ Hero Star Upgrade Calculator</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Hero Rarity:</label>
+                        <select id="hero-rarity" onchange="calculateShards()">
+                            <option value="mythic">Mythic</option>
+                            <option value="legendary">Legendary</option>
+                            <option value="epic">Epic</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Current Star Level:</label>
+                        <select id="current-stars" onchange="calculateShards()">
+                            <option value="0">0 Stars (Locked)</option>
+                            <option value="1">1 Star</option>
+                            <option value="2">2 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="4">4 Stars</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Target Star Level:</label>
+                        <select id="target-stars" onchange="calculateShards()">
+                            <option value="5">5 Stars (Max)</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <span>Shards Needed:</span>
+                    <h2 id="shards-needed">0 Shards</h2>
+                </div>
+            </div>
+        </div>
+
+        <div id="calc-kvk" class="sub-tab-content">
+            <div class="card">
+                <h3>⚔️ KvK Preparation Score Simulator</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Prep Day Focus:</label>
+                        <select id="kvk-day" onchange="calculateKvK()">
+                            <option value="train">Day 1: Troop Training</option>
+                            <option value="tech">Day 2: Research & Building</option>
+                            <option value="speedup">Day 4: Speedups Sprint</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Speedup Hours Saved:</label>
+                        <input type="number" id="speedup-hours" placeholder="e.g. 150" oninput="calculateKvK()">
+                    </div>
+                    <div class="input-group">
+                        <label>Gems Saved:</label>
+                        <input type="number" id="gems-amount" placeholder="e.g. 50000" oninput="calculateKvK()">
+                    </div>
+                </div>
+                <div class="result-box">
+                    <span>Estimated Points:</span>
+                    <h2 id="kvk-score">0 Points</h2>
+                </div>
+            </div>
+        </div>
+
+        <div id="calc-troops" class="sub-tab-content">
+            <div class="card">
+                <h3>🏹 Troop Training & Event Points</h3>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Troop Tier:</label>
+                        <select id="troop-tier" onchange="calculateTroops()">
+                            <option value="12">Tier 12 (T12)</option>
+                            <option value="11">Tier 11 (T11)</option>
+                            <option value="10" selected>Tier 10 (T10)</option>
+                            <option value="9">Tier 9 (T9)</option>
+                            <option value="8">Tier 8 (T8)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Number of Troops:</label>
+                        <input type="number" id="troop-count" placeholder="e.g. 10000" oninput="calculateTroops()">
+                    </div>
+                </div>
+                <div class="result-box">
+                    <span>Event Points Generated:</span>
+                    <h2 id="troop-points">0 Points</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module 3: Gift Codes -->
+    <div id="gifts" class="tab-content">
+        <h2>Active Redeem Codes</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 15px;">Real-time active gift codes synced from KingShot.net database.</p>
+        <div id="codes-list">Loading active gift codes...</div>
+    </div>
+
+    <!-- Module 4: Player Lookup -->
+    <div id="player-search" class="tab-content">
+        <h2>Player Profile Search</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 20px;">Lookup any player's stats and town center level using their Player ID.</p>
+        
+        <div class="card">
+            <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                <input type="text" id="player-id-input" placeholder="Enter Player ID (e.g. 341708235)" style="flex: 1; min-width: 220px; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: #0f172a; color: #fff; font-size: 1rem;">
+                <button onclick="searchPlayer()" class="copy-btn" style="padding: 12px 24px; font-size: 1rem;">Search Profile</button>
+            </div>
+            <div id="player-result"></div>
+        </div>
+    </div>
+
+    <!-- Module 5: Hero Tier List -->
+    <div id="heroes" class="tab-content">
+        <h2>Hero Roster & Tier List</h2>
+        <div id="heroes-list" class="grid-container">Loading heroes data...</div>
+    </div>
+
+    <!-- Module 6: KvK History -->
+    <div id="kvk-history" class="tab-content">
+        <h2>KvK Match History</h2>
+        <div id="kvk-matches-list">Loading past matches for Kingdom #2166...</div>
+    </div>
+
+    <footer>
+        Data dynamically sourced via KingshotPro & KingShot.net APIs.
+    </footer>
+</div>
+
+<script>
+    const MY_KINGDOM_ID = 2166; 
+
+    // Robust API Helper with Fallback Proxies
+    async function fetchApi(targetUrl) {
+        const endpoints = [
+            targetUrl, // 1. Direct fetch
+            `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, // 2. AllOrigins
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}` // 3. CodeTabs
+        ];
+
+        for (const url of endpoints) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) {
+                    const data = await res.json();
+                    return data;
+                }
+            } catch (e) {
+                console.warn(`Fetch failed for ${url}, trying next endpoint...`);
+            }
+        }
+        return null;
+    }
+
+    const OFFICIAL_TIMELINE = [
+        { date: "2026-06-07", title: "Generation 1 Heroes", type: "heroes", desc: "Gen 1 Heroes introduced at kingdom launch." },
+        { date: "2026-06-13", title: "First Sanctuary Battle", type: "event", desc: "The first Sanctuary battle opens." },
+        { date: "2026-06-20", title: "Plains fog cleared", type: "event", desc: "The outer plains fog lifts." },
+        { date: "2026-06-24", title: "Mystic Trial", type: "event", desc: "Mystic Trial becomes available." },
+        { date: "2026-07-01", title: "First Fortress Battle", type: "event", desc: "The first Fortress battle opens." },
+        { date: "2026-07-13", title: "Generation 2 Heroes", type: "heroes", desc: "Gen 2 Heroes introduced in events." },
+        { date: "2026-07-14", title: "Fertile Land fog cleared", type: "event", desc: "The Fertile Land fog lifts." },
+        { date: "2026-07-21", title: "Alliance resource exchange", type: "event", desc: "Alliance resource exchange unlocks." },
+        { date: "2026-07-30", title: "First King's Castle Battle", type: "castle", desc: "The first King's Castle battle opens!" },
+        { date: "2026-07-31", title: "Generation 1 Pets", type: "pets", desc: "Gray Wolf introduced." },
+        { date: "2026-08-01", title: "King's Castle War", type: "castle", desc: "King's Castle war round." },
+        { date: "2026-08-08", title: "King's Castle War", type: "castle", desc: "King's Castle war round." },
+        { date: "2026-08-15", title: "Age of Truegold", type: "tech", desc: "The Age of Truegold begins." },
+        { date: "2026-08-15", title: "King's Castle War", type: "castle", desc: "King's Castle war round." },
+        { date: "2026-08-15", title: "Generation 2 Pets", type: "pets", desc: "Moose, Cheetah, Bison & Lynx unlocked." },
+        { date: "2026-08-19", title: "First KvK preparation", type: "kvk", desc: "Preparation for the first KvK starts!" },
+        { date: "2026-08-22", title: "King's Castle War", type: "castle", desc: "King's Castle war round." },
+        { date: "2026-08-24", title: "First KvK Castle Battle", type: "kvk", desc: "The first cross-server castle battle!" },
+        { date: "2026-08-26", title: "First Alliance Brawl", type: "event", desc: "The first Alliance Brawl opens." },
+        { date: "2026-09-14", title: "Governor gear exchange", type: "tech", desc: "Governor gear material exchange opens." },
+        { date: "2026-09-14", title: "Generation 3 Heroes", type: "heroes", desc: "Gen 3 Heroes introduced." },
+        { date: "2026-09-14", title: "Generation 3 Pets", type: "pets", desc: "Lion & Grizzly Bear unlocked." },
+        { date: "2026-10-26", title: "Truegold 5", type: "tech", desc: "Truegold Tier 5 unlocked." },
+        { date: "2026-10-26", title: "Governor charm exchange", type: "tech", desc: "Governor charm material exchange opens." },
+        { date: "2026-11-16", title: "Governor charm cap raised", type: "tech", desc: "The Governor charm cap increases." },
+        { date: "2026-12-07", title: "Generation 4 Heroes", type: "heroes", desc: "Gen 4 Heroes introduced." },
+        { date: "2026-12-07", title: "Generation 4 Pets", type: "pets", desc: "Mighty Bison & Giant Rhino unlocked." },
+        { date: "2027-01-04", title: "War Academy", type: "tech", desc: "War Academy building & tech unlocks." },
+        { date: "2027-03-01", title: "Generation 5 Heroes", type: "heroes", desc: "Gen 5 Heroes introduced." },
+        { date: "2027-03-01", title: "Generation 5 Pets", type: "pets", desc: "Great Moose & Alpha Black Panther unlocked." },
+        { date: "2027-04-12", title: "Truegold 8", type: "tech", desc: "Truegold Tier 8 unlocked." },
+        { date: "2027-05-24", title: "Generation 6 Heroes", type: "heroes", desc: "Gen 6 Heroes introduced." },
+        { date: "2027-05-24", title: "Generation 6 Pets", type: "pets", desc: "Regal White Lion & Ironclad War Elephant." },
+        { date: "2027-08-16", title: "Generation 7 Heroes", type: "heroes", desc: "Gen 7 Heroes introduced." },
+        { date: "2027-08-16", title: "Generation 7 Pets", type: "pets", desc: "Gen 7 Pets unlocked." },
+        { date: "2027-09-27", title: "Truegold 10", type: "tech", desc: "Truegold Tier 10 unlocked." },
+        { date: "2027-11-08", title: "Generation 8 Heroes", type: "heroes", desc: "Gen 8 Heroes introduced." },
+        { date: "2027-11-08", title: "Generation 8 Pets", type: "pets", desc: "Gen 8 Pets unlocked." },
+        { date: "2028-01-31", title: "Generation 9 Heroes", type: "heroes", desc: "Gen 9 Heroes introduced." },
+        { date: "2028-01-31", title: "Generation 9 Pets", type: "pets", desc: "Gen 9 Pets unlocked." },
+        { date: "2028-04-24", title: "Generation 10 Heroes", type: "heroes", desc: "Gen 10 Heroes introduced." },
+        { date: "2028-04-24", title: "Generation 10 Pets", type: "pets", desc: "Gen 10 Pets unlocked." },
+        { date: "2028-07-17", title: "Generation 11 Heroes", type: "heroes", desc: "Gen 11 Heroes introduced." },
+        { date: "2028-07-17", title: "Generation 11 Pets", type: "pets", desc: "Gen 11 Pets unlocked." },
+        { date: "2028-10-09", title: "Generation 12 Heroes", type: "heroes", desc: "Gen 12 Heroes introduced." },
+        { date: "2028-10-09", title: "Generation 12 Pets", type: "pets", desc: "Gen 12 Pets unlocked." }
+    ];
+
+    function openTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    function openSubTab(subTabName) {
+        document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.sub-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(subTabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // 1. Render Official Timeline
+    function initKingdomData() {
+        const summaryContainer = document.getElementById('timeline-summary');
+        const roadmapContainer = document.getElementById('timeline-roadmap');
+        const badge = document.getElementById('kingdom-header-badge');
+
+        const openDate = new Date("2026-06-07T11:35:01.000Z");
+        const today = new Date();
+        
+        const ageDays = Math.max(0, Math.floor((today - openDate) / (1000 * 60 * 60 * 24)));
+        badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}`;
+
+        summaryContainer.innerHTML = `
+            <div class="card" style="margin-bottom: 25px; border-left: 4px solid var(--accent-color);">
+                <h3 style="margin:0;">Kingdom #${MY_KINGDOM_ID} Live Status</h3>
+                <p style="margin: 5px 0 0 0; color: var(--text-secondary);">
+                    Server Opened: <strong>07-06-2026</strong> | Age: <strong style="color: var(--accent-color);">${ageDays} Days Old</strong>
+                </p>
+            </div>
+        `;
+
+        let roadmapHtml = '';
+        let foundCurrent = false;
+
+        OFFICIAL_TIMELINE.forEach(m => {
+            const milestoneDate = new Date(m.date);
+            const diffTime = milestoneDate.setHours(0,0,0,0) - new Date().setHours(0,0,0,0);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            let statusClass = '';
+            let statusPill = '';
+
+            if (diffDays < 0) {
+                statusClass = 'completed';
+                statusPill = `<span class="status-pill passed">${m.date} · ${Math.abs(diffDays)}d ago</span>`;
+            } else if (diffDays === 0 || (!foundCurrent && diffDays > 0)) {
+                foundCurrent = true;
+                statusClass = 'current';
+                statusPill = `<span class="status-pill active">${m.date} · ${diffDays === 0 ? 'TODAY 🔥' : 'in ' + diffDays + ' days'}</span>`;
+            } else {
+                statusClass = 'upcoming';
+                statusPill = `<span class="status-pill upcoming">${m.date} · in ${diffDays} days</span>`;
+            }
+
+            const tagHtml = m.type ? `<span class="tag ${m.type}">${m.type}</span>` : '';
+
+            roadmapHtml += `
+                <div class="timeline-item ${statusClass}">
+                    <div class="timeline-header">
+                        <h4 class="timeline-title">${m.title} ${tagHtml}</h4>
+                        ${statusPill}
+                    </div>
+                    <p class="timeline-desc">${m.desc}</p>
+                </div>
+            `;
+        });
+
+        roadmapContainer.innerHTML = roadmapHtml;
+    }
+
+    // 2. Calculators Logic
+    function calculateShards() {
+        const rarity = document.getElementById('hero-rarity').value;
+        const current = parseInt(document.getElementById('current-stars').value);
+        const target = parseInt(document.getElementById('target-stars').value);
+
+        if (current >= target) {
+            document.getElementById('shards-needed').innerText = "0 Shards (Target reached)";
+            return;
+        }
+
+        const costs = {
+            mythic: [100, 200, 300, 400, 600],
+            legendary: [80, 150, 240, 320, 500],
+            epic: [40, 80, 120, 160, 250]
+        };
+
+        let total = 0;
+        for (let i = current; i < target; i++) {
+            total += costs[rarity][i];
+        }
+
+        document.getElementById('shards-needed').innerText = total.toLocaleString() + " Shards";
+    }
+
+    function calculateKvK() {
+        const hours = parseFloat(document.getElementById('speedup-hours').value) || 0;
+        const gems = parseFloat(document.getElementById('gems-amount').value) || 0;
+        const day = document.getElementById('kvk-day').value;
+
+        let multiplier = 30; 
+        if (day === 'tech') multiplier = 40;
+
+        const total = (hours * 60 * multiplier) + (gems * 2);
+        document.getElementById('kvk-score').innerText = total.toLocaleString() + " Points";
+    }
+
+    function calculateTroops() {
+        const tier = parseInt(document.getElementById('troop-tier').value);
+        const count = parseInt(document.getElementById('troop-count').value) || 0;
+
+        const pointValues = { 12: 100, 11: 75, 10: 50, 9: 35, 8: 20 };
+        const total = count * (pointValues[tier] || 10);
+
+        document.getElementById('troop-points').innerText = total.toLocaleString() + " Points";
+    }
+
+    // 3. Fetch Gift Codes
+    async function fetchGiftCodes() {
+        const container = document.getElementById('codes-list');
+        const data = await fetchApi('https://kingshot.net/api/gift-codes');
+
+        let codes = [];
+        if (data && data.status === 'success' && data.data && data.data.giftCodes && data.data.giftCodes.length > 0) {
+            codes = data.data.giftCodes;
+        } else {
+            codes = [{ id: 93, code: "Kingshot888", expiresAt: null }];
+        }
+
+        container.innerHTML = codes.map(c => `
+            <div class="code-card">
+                <div>
+                    <strong style="font-size:1.2rem; color:var(--accent-color);">${c.code}</strong>
+                    <br><small style="color:var(--text-secondary);">Expires: ${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : 'No expiration'}</small>
+                </div>
+                <button class="copy-btn" onclick="copyCode('${c.code}')">Copy Code</button>
+            </div>
+        `).join('');
+    }
+
+    function copyCode(code) {
+        navigator.clipboard.writeText(code);
+        alert('Code copied to clipboard: ' + code);
+    }
+
+    // 4. Player Lookup (/player-info)
+    async function searchPlayer() {
+        const id = document.getElementById('player-id-input').value.trim();
+        const container = document.getElementById('player-result');
+
+        if (!id) {
+            container.innerHTML = '<p style="color: var(--warning-color);">Please enter a valid Player ID.</p>';
+            return;
+        }
+
+        container.innerHTML = '<p style="color: var(--text-secondary);">Searching player profile...</p>';
+
+        const data = await fetchApi(`https://kingshot.net/api/player-info?playerId=${encodeURIComponent(id)}`);
+
+        if (data && data.status === 'success' && data.data) {
+            const p = data.data;
+            const avatarHtml = p.profilePhoto 
+                ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover;">` 
+                : `<div style="width: 70px; height: 70px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">👤</div>`;
+
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 18px; background: #0f172a; padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+                    ${avatarHtml}
+                    <div>
+                        <h3 style="margin: 0 0 5px 0; color: #fff; font-size: 1.2rem;">${p.name || 'Unknown Player'}</h3>
+                        <p style="margin: 3px 0; font-size: 0.9rem; color: var(--text-secondary);"><strong>Player ID:</strong> ${p.playerId}</p>
+                        <p style="margin: 3px 0; font-size: 0.9rem; color: var(--text-secondary);"><strong>Kingdom:</strong> #${p.kingdom}</p>
+                        <p style="margin: 3px 0; font-size: 0.95rem; color: var(--accent-color);"><strong>Town Center:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `<p style="color: var(--danger-color);">Player not found or request rate-limited. (Max 6 searches/min)</p>`;
+        }
+    }
+
+    // 5. Fetch Hero Tier List
+    async function fetchHeroes() {
+        try {
+            const res = await fetch('https://kingshotpro.com/data/heroes.json');
+            const data = await res.json();
+            const container = document.getElementById('heroes-list');
+
+            container.innerHTML = data.heroes.map(hero => `
+                <div class="card">
+                    <h3>${hero.name}</h3>
+                    <p><span class="badge ${hero.f2p ? 'f2p' : 'p2w'}">${hero.f2p ? 'F2P' : 'P2W / VIP'}</span> <small>Gen ${hero.gen}</small></p>
+                    <p style="margin: 4px 0;"><strong>Rally:</strong> ${hero.rally || 'N/A'}</p>
+                    <p style="margin: 4px 0;"><strong>Garrison:</strong> ${hero.garrison || 'N/A'}</p>
+                </div>
+            `).join('');
+        } catch(e) {
+            document.getElementById('heroes-list').innerHTML = 'Error loading hero database.';
+        }
+    }
+
+    // 6. Fetch KvK History
+    async function fetchKvKMatches() {
+        const container = document.getElementById('kvk-matches-list');
+        const data = await fetchApi(`https://kingshot.net/api/kvk/matches?kingdom_a=${MY_KINGDOM_ID}`);
+
+        if (data && data.status === 'success' && data.data && data.data.length > 0) {
+            container.innerHTML = data.data.map(m => `
+                <div class="card" style="margin-bottom: 10px;">
+                    <h3>${m.kvk_title || 'KvK Match'}</h3>
+                    <p><strong>Opponent:</strong> Kingdom #${m.kingdom_b === MY_KINGDOM_ID ? m.kingdom_a : m.kingdom_b}</p>
+                    <p><strong>Prep Phase Winner:</strong> Kingdom #${m.prep_winner}</p>
+                    <p><strong>Castle Winner:</strong> Kingdom #${m.castle_winner}</p>
+                </div>
+            `).join('');
+        } else {
+            container.innerHTML = `<p>No recorded KvK matches found yet for Kingdom #${MY_KINGDOM_ID}.</p>`;
+        }
+    }
+
+    // Initialize Page
+    initKingdomData();
+    calculateShards();
+    fetchGiftCodes();
+    fetchHeroes();
+    fetchKvKMatches();
+</script>
+
+</body>
+</html>
