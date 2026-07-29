@@ -809,17 +809,38 @@
         event.currentTarget.classList.add('active');
     }
 
-    // 1. Render Official Timeline
-    function initKingdomData() {
+    // 1. Render Official Timeline & Fetch Recurring Events for Header Badge
+    async function initKingdomData() {
         const summaryContainer = document.getElementById('timeline-summary');
         const roadmapContainer = document.getElementById('timeline-roadmap');
         const badge = document.getElementById('kingdom-header-badge');
 
         const openDate = new Date("2026-06-07T11:35:01.000Z");
         const today = new Date();
-        
         const ageDays = Math.max(0, Math.floor((today - openDate) / (1000 * 60 * 60 * 24)));
-        badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}`;
+        const dayOfWeek = today.getDay(); // 0 = Sun, 1 = Mon, 2 = Tue, 3 = Wed, 4 = Thu, 5 = Fri, 6 = Sat
+
+        // Fetch recurring events JSON from KingshotPro
+        let activeEventsList = [];
+        try {
+            const res = await fetch('https://kingshotpro.com/data/events.json');
+            const data = await res.json();
+            if (data && data.events) {
+                activeEventsList = data.events.filter(e => {
+                    const sched = e.schedule.toLowerCase();
+                    if (sched.includes('daily')) return true;
+                    if (sched.includes('tue') && dayOfWeek === 2) return true;
+                    if (sched.includes('thu') && dayOfWeek === 4) return true;
+                    return false;
+                }).map(e => e.name);
+            }
+        } catch (e) {
+            // Fallback se estiver offline
+            activeEventsList = ["Mystic Trials", "Bear Hunt", "Alliance Gifts"];
+        }
+
+        const eventsText = activeEventsList.length > 0 ? ` • Active: ${activeEventsList.join(', ')}` : '';
+        badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}${eventsText}`;
 
         summaryContainer.innerHTML = `
             <div class="card" style="margin-bottom: 25px; border-left: 4px solid var(--accent-color);">
@@ -869,7 +890,7 @@
         roadmapContainer.innerHTML = roadmapHtml;
     }
 
-    // --- 2. CALCULADORA INTERATIVA DE HERO SHARDS (CORRIGIDA) ---
+    // --- 2. CALCULADORA INTERATIVA DE HERO SHARDS ---
     const MATRIX = [
         [1, 1, 2, 2, 2, 2],        // Star 1 (Total: 10)
         [5, 5, 5, 5, 5, 15],       // Star 2 (Total: 40)
