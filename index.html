@@ -126,7 +126,7 @@
         }
 
         .nav-item:hover {
-            background-color: #0f172a;
+            background-color: var(--card-inner);
             color: #fff;
         }
 
@@ -167,7 +167,7 @@
             color: var(--accent-blue);
         }
 
-        /* Module Content Blocks */
+        /* Module Content Blocks & Guides */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -181,7 +181,61 @@
 
         .card h2, .card h3 {
             color: #fff;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+        }
+
+        .guide-content h2 {
+            font-size: 1.3rem;
+            color: var(--accent-blue);
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+        }
+
+        .guide-content h3 {
+            font-size: 1.05rem;
+            color: #fff;
+            margin: 15px 0 8px 0;
+        }
+
+        .guide-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .guide-content ul {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+
+        .guide-content ul li {
+            position: relative;
+            padding-left: 22px;
+            color: var(--text-main);
+            font-size: 0.93rem;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .guide-content ul li::before {
+            content: "•";
+            position: absolute;
+            left: 6px;
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+        }
+
+        blockquote {
+            background-color: var(--card-inner);
+            border-left: 4px solid var(--accent-blue);
+            padding: 16px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
 
         /* Sub Navigation Tabs for Calculators */
@@ -463,11 +517,11 @@
             font-size: 1.8rem;
         }
 
-        /* Matrix Table Styles */
+        /* Table Styles (Used in Calculators & Guides) */
         .table-wrapper { overflow-x: auto; margin-top: 15px; }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
         th, td { padding: 12px 10px; border-bottom: 1px solid var(--border-color); }
-        th { color: var(--text-muted); font-weight: 500; }
+        th { color: var(--text-muted); font-weight: 500; background: var(--card-inner); }
         td { color: var(--accent-blue); font-weight: 600; }
         td.star-label { color: #fff; }
         td.total-col { color: var(--text-muted); }
@@ -627,6 +681,11 @@
         <a class="nav-item" onclick="navigate('calculators', this)">🧮 Calculators</a>
         <a class="nav-item" onclick="navigate('glossary', this)">📖 Game Glossary</a>
 
+        <div class="nav-group-title">Alliance Guides</div>
+        <a class="nav-item" onclick="navigate('alliance-battles', this)">⚔️ Alliance Battles</a>
+        <a class="nav-item" onclick="navigate('alliance-championship', this)">🏆 Alliance Championship</a>
+        <a class="nav-item" onclick="navigate('alliance-mobilization', this)">📋 Alliance Mobilization</a>
+
         <div class="nav-group-title">Database & Tools</div>
         <a class="nav-item" onclick="navigate('gifts', this)">🎁 Gift Codes</a>
         <a class="nav-item" onclick="navigate('player-search', this)">🔍 Player Lookup</a>
@@ -642,7 +701,7 @@
     <div class="top-status-bar">
         <div>
             <h2 style="font-size: 1.3rem; color: #fff;">Kingdom #2166 Live Overview</h2>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & tools command center</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & alliance operations center</p>
         </div>
         <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166 | Syncing...</div>
     </div>
@@ -864,6 +923,233 @@
         </div>
 
         <div id="glossary-grid" class="glossary-grid"></div>
+    </section>
+
+    <!-- Guide Module A: Alliance Battles -->
+    <section id="alliance-battles" class="tab-content">
+        <div class="card guide-content">
+            <h2>⚔️ Alliance Battle</h2>
+            <p><strong>Sanctuaries • Fortresses • Outposts</strong></p>
+            <p>Alliance Battles are large-scale PvP events where teamwork, coordination and strategy are far more important than individual power. Winning these battles strengthens both you and the alliance.</p>
+
+            <h2>🏰 Why Alliance Battles Matter</h2>
+            <ul>
+                <li>🏆 Valuable personal and alliance rewards.</li>
+                <li>💎 Alliance Honor and event rewards.</li>
+                <li>📈 Strategic buffs and map control.</li>
+                <li>👑 Increased alliance influence across the kingdom.</li>
+                <li>💀 PvP experience and battle practice.</li>
+                <li>🤝 Stronger teamwork and rally coordination.</li>
+            </ul>
+
+            <blockquote>Every member's participation contributes to the alliance's success.</blockquote>
+
+            <h2>⚔️ Attacking</h2>
+            <p>Use your <strong>best three heroes</strong> and focus on offensive hero combinations.</p>
+
+            <h3>🤝 Rally Join Heroes</h3>
+            <p>Use one of these heroes as your <strong>first (left) hero</strong>:</p>
+            <ul>
+                <li>Chenko — Lethality %</li>
+                <li>Yeonwoo — Lethality %</li>
+                <li>Amane — Attack %</li>
+                <li>Amadeus — Lethality %</li>
+            </ul>
+            <p>If you don't own any of these heroes, <strong>join without heroes.</strong></p>
+
+            <h3>Recommended Troop Formation</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Infantry</th><th>Cavalry</th><th>Archers</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>50%</td><td>20%</td><td>30%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>🛡️ Defending & Garrison</h2>
+            <p>When reinforcing a building, use one of these heroes as your <strong>first (left) hero</strong>:</p>
+            <ul>
+                <li>Howard — Defense</li>
+                <li>Gordon — Health</li>
+                <li>Saul — Defense & Health</li>
+            </ul>
+
+            <h3>Recommended Troop Formation</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Infantry</th><th>Cavalry</th><th>Archers</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>70%</td><td>30%</td><td>0%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>❤️ Healing Troops</h2>
+            <ul>
+                <li>Heal troops immediately after battles.</li>
+                <li>Heal in small batches (under 500 troops).</li>
+                <li>Request Alliance Help every time.</li>
+                <li>Repeat until all troops are fully healed.</li>
+            </ul>
+
+            <h2>⚠️ Battle Guidelines</h2>
+            <ul>
+                <li>📍 Teleport near the battle only when instructed by R5 or R4.</li>
+                <li>🏕️ Move into alliance territory before the battle begins.</li>
+                <li>🚩 Leave the closest teleport spots for designated rally leaders.</li>
+                <li>⚔️ Rally leaders will be assigned before each battle.</li>
+                <li>🤝 Everyone else should focus on joining rallies quickly.</li>
+                <li>🛡️ Use Level 7 troops or higher whenever possible.</li>
+                <li>🦸 Always use the recommended heroes.</li>
+                <li>🔄 If removed from a rally because of incorrect heroes, simply update your march and rejoin.</li>
+                <li>🚫 Do not launch solo attacks unless instructed.</li>
+                <li>🎯 Follow all R5/R4 instructions throughout the battle.</li>
+            </ul>
+
+            <blockquote>
+                <strong>💙 Teamwork Wins Battles</strong><br><br>
+                A strong alliance isn't built by individual power—it's built by teamwork, communication and coordination.<br><br>
+                Fight Smart ⚔️ • Rally Fast 🤝 • Heal Quickly ❤️ • Win Together 🏆
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Guide Module B: Alliance Championship -->
+    <section id="alliance-championship" class="tab-content">
+        <div class="card guide-content">
+            <h2>🏆 Alliance Championship</h2>
+            <p><strong>Plan. Register. Win.</strong></p>
+            <p>Alliance Championship is a strategic PvP event where proper registration is just as important as troop strength. Following the alliance strategy gives us the best chance of victory.</p>
+
+            <h2>📋 Registration</h2>
+            <ul>
+                <li>✅ Register in the <strong>Middle Lane ONLY</strong>.</li>
+                <li>🚫 Do <strong>NOT</strong> register in the Left or Right Lane unless instructed by Leadership.</li>
+                <li>💡 Leadership will reorganize players after registration to create the strongest possible lineup.</li>
+            </ul>
+
+            <blockquote>
+                <strong>Why Middle Lane?</strong><br><br>
+                Matchmaking is based on the <strong>Top 20 combatants in each lane</strong>. Registering everyone in the Middle allows Leadership to redistribute players strategically across all three lanes.
+            </blockquote>
+
+            <h2>⚔️ Battle Setup</h2>
+            <h3>🦸 Heroes</h3>
+            <p>Use your <strong>best 3 heroes</strong>.</p>
+
+            <h3>🛡️ Recommended Formation</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Troop Type</th><th>Percentage</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>🛡️ Infantry</td><td>50%</td></tr>
+                        <tr><td>🐎 Cavalry</td><td>20%</td></tr>
+                        <tr><td>🏹 Archers</td><td>30%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>Update your troop formation before every Championship as you unlock stronger troops, heroes, or research upgrades.</p>
+
+            <h2>💙 VEN Tips</h2>
+            <ul>
+                <li>💡 Register in the <strong>Middle Lane</strong> and let Leadership handle lane assignments.</li>
+                <li>💡 Update your march whenever you unlock stronger heroes or troops.</li>
+                <li>💡 If you're unsure about your formation, ask an R4 before registration.</li>
+                <li>💡 Check your heroes and troop presets before the battle begins.</li>
+            </ul>
+
+            <blockquote>
+                <strong>Preparation wins battles before they begin.</strong><br><br>
+                Register Smart 🏆 • Follow Leadership 🤝 • Fight Together ⚔️
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Guide Module C: Alliance Mobilization -->
+    <section id="alliance-mobilization" class="tab-content">
+        <div class="card guide-content">
+            <h2>📋 Alliance Mobilization</h2>
+            <p><strong>Complete missions. Earn points. Unlock rewards.</strong></p>
+            <p>Alliance Mobilization is a team event where members complete missions to earn points for themselves and the alliance. The more points earned, the better the milestone rewards for everyone.</p>
+
+            <h2>📋 Before the Event</h2>
+            <ul>
+                <li>✅ Save Construction, Research and Training Speedups.</li>
+                <li>✅ Delay completing Construction and Research until the event begins.</li>
+                <li>✅ Keep enough resources available to complete missions.</li>
+                <li>✅ Refresh low-value missions and prioritize high-point tasks.</li>
+            </ul>
+
+            <h2>⭐ Quick Tips</h2>
+            <ul>
+                <li>🎯 Complete high-value missions.</li>
+                <li>🔄 Refresh poor-value missions.</li>
+                <li>⏳ Save speedups for the event.</li>
+                <li>🏗️ Time your research and construction.</li>
+                <li>🏆 Reach every personal milestone.</li>
+                <li>🤝 Every member should contribute.</li>
+            </ul>
+
+            <h2>🎁 Rewards</h2>
+            <h3>Personal Rewards</h3>
+            <ul>
+                <li>⏱️ Speedups</li>
+                <li>💎 Gems</li>
+                <li>🪵 Resources</li>
+                <li>🧱 Building Materials</li>
+                <li>🦸 Hero Upgrade Materials</li>
+                <li>📦 Personal Milestone Chests</li>
+                <li>🏅 Event Ranking Rewards</li>
+            </ul>
+
+            <h3>Alliance Rewards</h3>
+            <ul>
+                <li>📦 Alliance Milestone Chests</li>
+                <li>⏱️ Speedups</li>
+                <li>💎 Gems</li>
+                <li>🪵 Resources</li>
+                <li>🦸 Hero Upgrade Materials</li>
+            </ul>
+
+            <h2>📋 Best Mission Types</h2>
+            <p>Prioritize missions that provide the highest points for the least effort:</p>
+            <ul>
+                <li>🏗️ Construction</li>
+                <li>🔬 Research</li>
+                <li>⚔️ Troop Training</li>
+                <li>🌲 Resource Gathering</li>
+                <li>🐻 Beast Hunting</li>
+            </ul>
+
+            <h2>🚫 Common Mistakes</h2>
+            <ul>
+                <li>❌ Completing Construction or Research before the event starts.</li>
+                <li>❌ Accepting low-point missions.</li>
+                <li>❌ Letting missions expire.</li>
+                <li>❌ Using speedups on poor-value tasks.</li>
+                <li>❌ Ignoring easy gathering missions.</li>
+            </ul>
+
+            <h2>💙 VEN Tips</h2>
+            <ul>
+                <li>💡 Save Construction, Research and Training speedups specifically for Alliance Mobilization whenever possible.</li>
+                <li>💡 If you're unsure whether a mission is worth completing, ask an R4 before spending resources or speedups.</li>
+                <li>💡 If you're pushing for leaderboard rankings, consider saving your speedups for the final hours.</li>
+                <li>💡 Even if you can't reach the top rankings, completing your personal milestones helps the entire alliance unlock better rewards.</li>
+            </ul>
+
+            <blockquote>
+                <strong>Every point matters.</strong><br><br>
+                Complete Missions 📋 • Earn Points 🏆 • Help the Alliance 🤝
+            </blockquote>
+        </div>
     </section>
 
     <!-- Module 4: Active Gift Codes -->
