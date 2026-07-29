@@ -215,8 +215,8 @@
         /* Form Controls */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
             margin-bottom: 15px;
         }
 
@@ -352,11 +352,11 @@
             <button class="sub-tab-btn" onclick="openSubTab('calc-troops')">🏹 Troop Training</button>
         </div>
 
-        <!-- Sub-Tab 1: Hero Shards (Precise Sub-Stars) -->
+        <!-- Sub-Tab 1: Hero Shards (Precise Major & Sub-Stars) -->
         <div id="calc-shards" class="sub-tab-content active">
             <div class="card">
                 <h3>⭐ Hero Star & Sub-Star Upgrade Calculator</h3>
-                <p style="font-size: 0.85rem; color: var(--text-secondary);">Calculates exact shards including intermediate sub-star levels (5 sub-stars per star level).</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Select exact Current & Target Star levels (including sub-stars) to get the precise shard requirements.</p>
                 
                 <div class="form-grid">
                     <div class="input-group">
@@ -367,6 +367,7 @@
                             <option value="rare">Rare (R / Blue)</option>
                         </select>
                     </div>
+
                     <div class="input-group">
                         <label>Current Major Star:</label>
                         <select id="current-stars" onchange="calculateShards()">
@@ -377,6 +378,7 @@
                             <option value="4">4 Stars</option>
                         </select>
                     </div>
+
                     <div class="input-group">
                         <label>Current Sub-Stars:</label>
                         <select id="current-substars" onchange="calculateShards()">
@@ -387,9 +389,10 @@
                             <option value="4">4 / 5 Sub-stars</option>
                         </select>
                     </div>
+
                     <div class="input-group">
                         <label>Target Major Star:</label>
-                        <select id="target-stars" onchange="calculateShards()">
+                        <select id="target-stars" onchange="updateTargetSubStarsUI(); calculateShards();">
                             <option value="5" selected>5 Stars (Max)</option>
                             <option value="4">4 Stars</option>
                             <option value="3">3 Stars</option>
@@ -397,7 +400,19 @@
                             <option value="1">1 Star</option>
                         </select>
                     </div>
+
+                    <div class="input-group">
+                        <label>Target Sub-Stars:</label>
+                        <select id="target-substars" onchange="calculateShards()">
+                            <option value="0">0 / 5 Sub-stars</option>
+                            <option value="1">1 / 5 Sub-stars</option>
+                            <option value="2">2 / 5 Sub-stars</option>
+                            <option value="3">3 / 5 Sub-stars</option>
+                            <option value="4">4 / 5 Sub-stars</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="result-box">
                     <span>Shards Needed:</span>
                     <h2 id="shards-needed">0 Shards</h2>
@@ -405,7 +420,7 @@
             </div>
         </div>
 
-        <!-- Sub-Tab 2: Pet XP & Food Calculator (NOVA!) -->
+        <!-- Sub-Tab 2: Pet XP & Food Calculator -->
         <div id="calc-pets" class="sub-tab-content">
             <div class="card">
                 <h3>🐾 Pet Level & Food Calculator</h3>
@@ -547,19 +562,26 @@
 <script>
     const MY_KINGDOM_ID = 2166; 
 
-    // Helper de API com JSON-Wrapper para evitar problemas de CORS
+    // Robust Multi-Proxy Fallback Helper
     async function fetchApi(targetUrl) {
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
-        try {
-            const res = await fetch(proxyUrl);
-            if (res.ok) {
-                const wrapper = await res.json();
-                if (wrapper && wrapper.contents) {
-                    return JSON.parse(wrapper.contents);
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+        ];
+
+        for (const proxy of proxies) {
+            try {
+                const res = await fetch(proxy);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.contents) {
+                        try { return JSON.parse(data.contents); } catch(e) { return data.contents; }
+                    }
+                    return data;
                 }
+            } catch (e) {
+                // Silent fallback
             }
-        } catch (e) {
-            console.warn(`Connection failed for ${targetUrl}:`, e);
         }
         return null;
     }
@@ -687,25 +709,35 @@
         roadmapContainer.innerHTML = roadmapHtml;
     }
 
-    // 2. Calculadora de Heróis (Custo Exato por Micro-Estrelas: 5 sub-estrelas por estrela)
+    // Atualiza a UI para bloquear Sub-stars a 0 se o Target for 5 Estrelas (5.0 Max)
+    function updateTargetSubStarsUI() {
+        const targetMajor = parseInt(document.getElementById('target-stars').value);
+        const targetSubSelect = document.getElementById('target-substars');
+        
+        if (targetMajor === 5) {
+            targetSubSelect.value = "0";
+            targetSubSelect.disabled = true;
+        } else {
+            targetSubSelect.disabled = false;
+        }
+    }
+
+    // 2. Calculadora de Heróis (Sub-estrelas e Estrelas Principais com precisão total)
     function calculateShards() {
         const rarity = document.getElementById('hero-rarity').value;
         const currentMajor = parseInt(document.getElementById('current-stars').value);
         const currentSub = parseInt(document.getElementById('current-substars').value);
         const targetMajor = parseInt(document.getElementById('target-stars').value);
+        const targetSub = parseInt(document.getElementById('target-substars').value);
 
         const currentSubIndex = (currentMajor * 5) + currentSub;
-        const targetSubIndex = targetMajor * 5;
+        const targetSubIndex = (targetMajor * 5) + targetSub;
 
         if (currentSubIndex >= targetSubIndex) {
             document.getElementById('shards-needed').innerText = "0 Shards (Target reached)";
             return;
         }
 
-        // Tabela de Shards por cada uma das 25 sub-estrelas (0.1 até 5.0)
-        // Mythic: 10/sub (Star 1), 15/sub (Star 2), 30/sub (Star 3), 65/sub (Star 4), 120/sub (Star 5)
-        // Epic:   5/sub (Star 1),  10/sub (Star 2), 15/sub (Star 3), 30/sub (Star 4), 60/sub (Star 5)
-        // Rare:   2/sub (Star 1),   4/sub (Star 2),  8/sub (Star 3), 15/sub (Star 4), 31/sub (Star 5)
         const subStarCosts = {
             mythic: [
                 10,10,10,10,10, // Star 1
@@ -754,13 +786,11 @@
             return;
         }
 
-        // Multiplicador por raridade
         const multipliers = { mythic: 1.5, epic: 1.0, rare: 0.75 };
         const mult = multipliers[rarity] || 1.0;
 
         let totalXP = 0;
         for (let lvl = currentLvl; lvl < targetLvl; lvl++) {
-            // Curva de XP por Nível
             let baseLvlXP = 150 + (lvl * 80) + Math.pow(lvl, 1.6) * 12;
             totalXP += Math.floor(baseLvlXP * mult);
         }
@@ -772,7 +802,6 @@
         document.getElementById('pet-food-common').innerText = commonFood.toLocaleString();
         document.getElementById('pet-food-adv').innerText = advFood.toLocaleString();
 
-        // Próximo marco de habilidade passiva
         const milestones = [20, 40, 60, 80, 100];
         const nextMilestone = milestones.find(m => m > currentLvl && m <= targetLvl);
         
@@ -913,6 +942,7 @@
 
     // Initialize Page
     initKingdomData();
+    updateTargetSubStarsUI();
     calculateShards();
     calculatePetXP();
     fetchGiftCodes();
