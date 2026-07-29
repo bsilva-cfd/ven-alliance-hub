@@ -80,6 +80,7 @@
             margin-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 12px;
+            flex-wrap: wrap;
         }
 
         .sub-tab-btn {
@@ -214,7 +215,7 @@
         /* Form Controls */
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 15px;
         }
@@ -252,6 +253,20 @@
             margin: 5px 0 0 0;
             color: var(--accent-color);
             font-size: 1.8rem;
+        }
+
+        .pet-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .pet-stat-card {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
         }
 
         .code-card {
@@ -332,24 +347,28 @@
 
         <div class="sub-nav-tabs">
             <button class="sub-tab-btn active" onclick="openSubTab('calc-shards')">⭐ Hero Shards</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-pets')">🐾 Pet XP & Food</button>
             <button class="sub-tab-btn" onclick="openSubTab('calc-kvk')">⚔️ KvK Score</button>
             <button class="sub-tab-btn" onclick="openSubTab('calc-troops')">🏹 Troop Training</button>
         </div>
 
+        <!-- Sub-Tab 1: Hero Shards (Precise Sub-Stars) -->
         <div id="calc-shards" class="sub-tab-content active">
             <div class="card">
-                <h3>⭐ Hero Star Upgrade Calculator</h3>
+                <h3>⭐ Hero Star & Sub-Star Upgrade Calculator</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Calculates exact shards including intermediate sub-star levels (5 sub-stars per star level).</p>
+                
                 <div class="form-grid">
                     <div class="input-group">
                         <label>Hero Rarity:</label>
                         <select id="hero-rarity" onchange="calculateShards()">
-                            <option value="mythic">Mythic</option>
-                            <option value="legendary">Legendary</option>
-                            <option value="epic">Epic</option>
+                            <option value="mythic">Mythic (SSR / Gold)</option>
+                            <option value="epic">Epic (SR / Purple)</option>
+                            <option value="rare">Rare (R / Blue)</option>
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Current Star Level:</label>
+                        <label>Current Major Star:</label>
                         <select id="current-stars" onchange="calculateShards()">
                             <option value="0">0 Stars (Locked)</option>
                             <option value="1">1 Star</option>
@@ -359,9 +378,19 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label>Target Star Level:</label>
+                        <label>Current Sub-Stars:</label>
+                        <select id="current-substars" onchange="calculateShards()">
+                            <option value="0">0 / 5 Sub-stars</option>
+                            <option value="1">1 / 5 Sub-stars</option>
+                            <option value="2">2 / 5 Sub-stars</option>
+                            <option value="3">3 / 5 Sub-stars</option>
+                            <option value="4">4 / 5 Sub-stars</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Target Major Star:</label>
                         <select id="target-stars" onchange="calculateShards()">
-                            <option value="5">5 Stars (Max)</option>
+                            <option value="5" selected>5 Stars (Max)</option>
                             <option value="4">4 Stars</option>
                             <option value="3">3 Stars</option>
                             <option value="2">2 Stars</option>
@@ -376,6 +405,51 @@
             </div>
         </div>
 
+        <!-- Sub-Tab 2: Pet XP & Food Calculator (NOVA!) -->
+        <div id="calc-pets" class="sub-tab-content">
+            <div class="card">
+                <h3>🐾 Pet Level & Food Calculator</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Calculate required XP and Pet Food to reach target level and skill unlocks.</p>
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Pet Rarity:</label>
+                        <select id="pet-rarity" onchange="calculatePetXP()">
+                            <option value="mythic">Mythic Pet</option>
+                            <option value="epic" selected>Epic Pet</option>
+                            <option value="rare">Rare Pet</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Current Pet Level:</label>
+                        <input type="number" id="pet-current-lvl" value="1" min="1" max="100" oninput="calculatePetXP()">
+                    </div>
+                    <div class="input-group">
+                        <label>Target Pet Level:</label>
+                        <input type="number" id="pet-target-lvl" value="50" min="1" max="100" oninput="calculatePetXP()">
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <span>Total XP Needed:</span>
+                    <h2 id="pet-total-xp">0 XP</h2>
+                    
+                    <div class="pet-stats-grid">
+                        <div class="pet-stat-card">
+                            <small style="color: var(--text-secondary);">Common Food (100 XP)</small>
+                            <h4 id="pet-food-common" style="margin: 5px 0 0 0; color: #fff;">0</h4>
+                        </div>
+                        <div class="pet-stat-card">
+                            <small style="color: var(--text-secondary);">Advanced Food (1k XP)</small>
+                            <h4 id="pet-food-adv" style="margin: 5px 0 0 0; color: var(--accent-color);">0</h4>
+                        </div>
+                    </div>
+                    <p id="pet-milestone-info" style="font-size: 0.85rem; color: var(--warning-color); margin-top: 12px;"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sub-Tab 3: KvK Score -->
         <div id="calc-kvk" class="sub-tab-content">
             <div class="card">
                 <h3>⚔️ KvK Preparation Score Simulator</h3>
@@ -404,6 +478,7 @@
             </div>
         </div>
 
+        <!-- Sub-Tab 4: Troop Training -->
         <div id="calc-troops" class="sub-tab-content">
             <div class="card">
                 <h3>🏹 Troop Training & Event Points</h3>
@@ -472,21 +547,15 @@
 <script>
     const MY_KINGDOM_ID = 2166; 
 
-    // Robust API Helper with Fallback Proxies
+    // Helper de API com JSON-Wrapper para evitar problemas de CORS
     async function fetchApi(targetUrl) {
         const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
-
         try {
             const res = await fetch(proxyUrl);
             if (res.ok) {
                 const wrapper = await res.json();
                 if (wrapper && wrapper.contents) {
-                    // Tenta converter o conteúdo retornado para JSON
-                    try {
-                        return JSON.parse(wrapper.contents);
-                    } catch (err) {
-                        console.warn("Contents returned were not valid JSON:", wrapper.contents);
-                    }
+                    return JSON.parse(wrapper.contents);
                 }
             }
         } catch (e) {
@@ -618,31 +687,103 @@
         roadmapContainer.innerHTML = roadmapHtml;
     }
 
-    // 2. Calculators Logic
+    // 2. Calculadora de Heróis (Custo Exato por Micro-Estrelas: 5 sub-estrelas por estrela)
     function calculateShards() {
         const rarity = document.getElementById('hero-rarity').value;
-        const current = parseInt(document.getElementById('current-stars').value);
-        const target = parseInt(document.getElementById('target-stars').value);
+        const currentMajor = parseInt(document.getElementById('current-stars').value);
+        const currentSub = parseInt(document.getElementById('current-substars').value);
+        const targetMajor = parseInt(document.getElementById('target-stars').value);
 
-        if (current >= target) {
+        const currentSubIndex = (currentMajor * 5) + currentSub;
+        const targetSubIndex = targetMajor * 5;
+
+        if (currentSubIndex >= targetSubIndex) {
             document.getElementById('shards-needed').innerText = "0 Shards (Target reached)";
             return;
         }
 
-        const costs = {
-            mythic: [100, 200, 300, 400, 600],
-            legendary: [80, 150, 240, 320, 500],
-            epic: [40, 80, 120, 160, 250]
+        // Tabela de Shards por cada uma das 25 sub-estrelas (0.1 até 5.0)
+        // Mythic: 10/sub (Star 1), 15/sub (Star 2), 30/sub (Star 3), 65/sub (Star 4), 120/sub (Star 5)
+        // Epic:   5/sub (Star 1),  10/sub (Star 2), 15/sub (Star 3), 30/sub (Star 4), 60/sub (Star 5)
+        // Rare:   2/sub (Star 1),   4/sub (Star 2),  8/sub (Star 3), 15/sub (Star 4), 31/sub (Star 5)
+        const subStarCosts = {
+            mythic: [
+                10,10,10,10,10, // Star 1
+                15,15,15,15,15, // Star 2
+                30,30,30,30,30, // Star 3
+                65,65,65,65,65, // Star 4
+                120,120,120,120,120 // Star 5
+            ],
+            epic: [
+                5,5,5,5,5,     // Star 1
+                10,10,10,10,10, // Star 2
+                15,15,15,15,15, // Star 3
+                30,30,30,30,30, // Star 4
+                60,60,60,60,60  // Star 5
+            ],
+            rare: [
+                2,2,2,2,2,     // Star 1
+                4,4,4,4,4,     // Star 2
+                8,8,8,8,8,     // Star 3
+                15,15,15,15,15,// Star 4
+                31,31,31,31,31 // Star 5
+            ]
         };
 
         let total = 0;
-        for (let i = current; i < target; i++) {
-            total += costs[rarity][i];
+        const costs = subStarCosts[rarity];
+
+        for (let i = currentSubIndex; i < targetSubIndex; i++) {
+            total += costs[i] || 0;
         }
 
         document.getElementById('shards-needed').innerText = total.toLocaleString() + " Shards";
     }
 
+    // 3. Calculadora de Pets (XP & Food)
+    function calculatePetXP() {
+        const rarity = document.getElementById('pet-rarity').value;
+        const currentLvl = parseInt(document.getElementById('pet-current-lvl').value) || 1;
+        const targetLvl = parseInt(document.getElementById('pet-target-lvl').value) || 1;
+
+        if (currentLvl >= targetLvl) {
+            document.getElementById('pet-total-xp').innerText = "0 XP";
+            document.getElementById('pet-food-common').innerText = "0";
+            document.getElementById('pet-food-adv').innerText = "0";
+            document.getElementById('pet-milestone-info').innerText = "Target level reached!";
+            return;
+        }
+
+        // Multiplicador por raridade
+        const multipliers = { mythic: 1.5, epic: 1.0, rare: 0.75 };
+        const mult = multipliers[rarity] || 1.0;
+
+        let totalXP = 0;
+        for (let lvl = currentLvl; lvl < targetLvl; lvl++) {
+            // Curva de XP por Nível
+            let baseLvlXP = 150 + (lvl * 80) + Math.pow(lvl, 1.6) * 12;
+            totalXP += Math.floor(baseLvlXP * mult);
+        }
+
+        const commonFood = Math.ceil(totalXP / 100);
+        const advFood = Math.ceil(totalXP / 1000);
+
+        document.getElementById('pet-total-xp').innerText = totalXP.toLocaleString() + " XP";
+        document.getElementById('pet-food-common').innerText = commonFood.toLocaleString();
+        document.getElementById('pet-food-adv').innerText = advFood.toLocaleString();
+
+        // Próximo marco de habilidade passiva
+        const milestones = [20, 40, 60, 80, 100];
+        const nextMilestone = milestones.find(m => m > currentLvl && m <= targetLvl);
+        
+        if (nextMilestone) {
+            document.getElementById('pet-milestone-info').innerText = `🔥 Reaching Lv ${targetLvl} unlocks Passive Skill Slot / Tier at Lv ${nextMilestone}!`;
+        } else {
+            document.getElementById('pet-milestone-info').innerText = `✨ Increases raw stats & combat effectiveness for your marches.`;
+        }
+    }
+
+    // 4. Calculadora de KvK
     function calculateKvK() {
         const hours = parseFloat(document.getElementById('speedup-hours').value) || 0;
         const gems = parseFloat(document.getElementById('gems-amount').value) || 0;
@@ -655,6 +796,7 @@
         document.getElementById('kvk-score').innerText = total.toLocaleString() + " Points";
     }
 
+    // 5. Calculadora de Tropas
     function calculateTroops() {
         const tier = parseInt(document.getElementById('troop-tier').value);
         const count = parseInt(document.getElementById('troop-count').value) || 0;
@@ -665,7 +807,7 @@
         document.getElementById('troop-points').innerText = total.toLocaleString() + " Points";
     }
 
-    // 3. Fetch Gift Codes
+    // 6. Fetch Gift Codes
     async function fetchGiftCodes() {
         const container = document.getElementById('codes-list');
         const data = await fetchApi('https://kingshot.net/api/gift-codes');
@@ -693,8 +835,8 @@
         alert('Code copied to clipboard: ' + code);
     }
 
-// 4. Player Lookup (/player-info com JSON-Wrapper para evitar bloqueios de CORS)
-async function searchPlayer() {
+    // 7. Pesquisa de Jogador (/player-info)
+    async function searchPlayer() {
         const id = document.getElementById('player-id-input').value.trim();
         const container = document.getElementById('player-result');
 
@@ -706,46 +848,31 @@ async function searchPlayer() {
         container.innerHTML = '<p style="color: var(--text-secondary);">Searching player profile...</p>';
 
         const targetUrl = `https://kingshot.net/api/player-info?playerId=${encodeURIComponent(id)}`;
-        
-        // Tentativa de leitura via proxy AllOrigins
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`;
+        const data = await fetchApi(targetUrl);
 
-        try {
-            const res = await fetch(proxyUrl);
-            if (res.ok) {
-                const wrapper = await res.json();
-                if (wrapper && wrapper.contents) {
-                    const data = JSON.parse(wrapper.contents);
-                    
-                    if (data && data.status === 'success' && data.data) {
-                        const p = data.data;
-                        const avatarHtml = p.profilePhoto 
-                            ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover;">` 
-                            : `<div style="width: 75px; height: 75px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">👑</div>`;
+        if (data && data.status === 'success' && data.data) {
+            const p = data.data;
+            const avatarHtml = p.profilePhoto 
+                ? `<img src="${p.profilePhoto}" alt="${p.name}" style="width: 75px; height: 75px; border-radius: 50%; border: 2px solid var(--accent-color); object-fit: cover;">` 
+                : `<div style="width: 75px; height: 75px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">👑</div>`;
 
-                        container.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 20px; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); flex-wrap: wrap;">
-                                ${avatarHtml}
-                                <div>
-                                    <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 1.3rem;">${p.name || 'Unknown Player'}</h3>
-                                    <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Player ID:</strong> ${p.playerId}</p>
-                                    <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Kingdom:</strong> #${p.kingdom}</p>
-                                    <p style="margin: 4px 0; font-size: 1rem; color: var(--accent-color);"><strong>Town Center Level:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
-                                </div>
-                            </div>
-                        `;
-                        return;
-                    }
-                }
-            }
-        } catch (e) {
-            console.warn("API Lookup failed:", e);
+            container.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 20px; background: #0f172a; padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+                    ${avatarHtml}
+                    <div>
+                        <h3 style="margin: 0 0 6px 0; color: #fff; font-size: 1.3rem;">${p.name || 'Unknown Player'}</h3>
+                        <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Player ID:</strong> ${p.playerId}</p>
+                        <p style="margin: 4px 0; font-size: 0.95rem; color: var(--text-secondary);"><strong>Kingdom:</strong> #${p.kingdom}</p>
+                        <p style="margin: 4px 0; font-size: 1rem; color: var(--accent-color);"><strong>Town Center Level:</strong> ${p.levelRenderedDetailed || ('Level ' + p.level)}</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `<p style="color: var(--danger-color);">Player ID not found or rate-limited. Please check the ID and try again in 1 minute.</p>`;
         }
-
-        container.innerHTML = `<p style="color: var(--danger-color);">Player ID not found or rate-limited by the server. Please check the ID and try again in 1 minute.</p>`;
     }
 
-    // 5. Fetch Hero Tier List
+    // 8. Fetch Hero Tier List
     async function fetchHeroes() {
         try {
             const res = await fetch('https://kingshotpro.com/data/heroes.json');
@@ -765,7 +892,7 @@ async function searchPlayer() {
         }
     }
 
-    // 6. Fetch KvK History
+    // 9. Fetch KvK History
     async function fetchKvKMatches() {
         const container = document.getElementById('kvk-matches-list');
         const data = await fetchApi(`https://kingshot.net/api/kvk/matches?kingdom_a=${MY_KINGDOM_ID}`);
@@ -787,6 +914,7 @@ async function searchPlayer() {
     // Initialize Page
     initKingdomData();
     calculateShards();
+    calculatePetXP();
     fetchGiftCodes();
     fetchHeroes();
     fetchKvKMatches();
