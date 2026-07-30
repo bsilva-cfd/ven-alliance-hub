@@ -4,36 +4,36 @@
 
 const MY_KINGDOM_ID = 2166;
 
-// Base de Dados dos Cartões de Eventos para Renderização Dinâmica
+// Dynamic Event Cards Database (All English)
 const EVENT_CARDS = {
     viking: {
         title: "🛡️ Viking Attack Guide",
         url: "viking-attack.html",
-        desc: "Estratégia de 20 ondas, defesa do QG e reforços de Infantaria para maximizar pontos."
+        desc: "20-wave defense strategy, HQ reinforcement rules, and Infantry troop presets to maximize points."
     },
     bear: {
         title: "🐻 Bear Trap Strategy",
         url: "bear-trap.html",
-        desc: "Otimiza os heróis de rally, formações de entrada e danos na Bear Trap."
+        desc: "Optimize rally lead heroes, join formations, and maximize alliance damage output."
     },
     mobi: {
         title: "📋 Alliance Mobilization",
         url: "alliance-mobilization.html",
-        desc: "Cumpre missões, gere speedups e desbloqueia os baús de metas da aliança."
+        desc: "Complete missions, manage speedups, and unlock alliance milestone chests."
     },
     championship: {
         title: "🏆 Alliance Championship",
         url: "alliance-championship.html",
-        desc: "Inscrição no Middle Lane, heróis táticos e rácios de tropas para vitória."
+        desc: "Middle Lane registration rules, tactical hero setups, and troop formation ratios for victory."
     },
     swordland: {
         title: "🗡️ Swordland Showdown",
         url: "swordland-showdown.html",
-        desc: "Truques F2P para o hospital, captura de edifícios e meta dos 180K pontos."
+        desc: "F2P hospital survival tricks, capturing objectives, and hitting the 180K point milestone."
     }
 };
 
-// TIMELINE OFICIAL DO REINO #2166
+// OFFICIAL 46-ITEM KINGDOM TIMELINE
 const OFFICIAL_TIMELINE = [
     { date: "2026-06-07", title: "Generation 1 Heroes", type: "heroes", desc: "Gen 1 Heroes introduced at kingdom launch." },
     { date: "2026-06-13", title: "First Sanctuary Battle", type: "event", desc: "The first Sanctuary battle opens." },
@@ -83,7 +83,13 @@ const OFFICIAL_TIMELINE = [
     { date: "2028-10-09", title: "Generation 12 Pets", type: "pets", desc: "Gen 12 Pets unlocked." }
 ];
 
-// Função Principal de Inicialização do Reino
+// Toggle Mobile Sidebar
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.classList.toggle('open');
+}
+
+// Kingdom Operations & Event Rendering
 async function initKingdomData() {
     const summaryContainer = document.getElementById('timeline-summary');
     const roadmapContainer = document.getElementById('timeline-roadmap');
@@ -98,7 +104,7 @@ async function initKingdomData() {
     let activeEventsList = [];
     let activeCardKeys = [];
 
-    // Cálculo do Ciclo do Hall of Governors (14 Dias)
+    // Hall of Governors calculation (Reference start: Mon, July 27, 2026)
     const hogReferenceStart = new Date("2026-07-27T00:00:00Z");
     const diffDaysFromRef = Math.floor((today - hogReferenceStart) / (1000 * 60 * 60 * 24));
     const hogCycleDay = ((diffDaysFromRef % 14) + 14) % 14;
@@ -107,28 +113,22 @@ async function initKingdomData() {
         activeEventsList.push(`🏆 Hall of Governors (Day ${hogCycleDay + 1}/6)`);
     }
 
-    // Regras de Eventos por Dia da Semana / Ciclos
-    // Terças (2) e Quintas (4) costumam ter Bear Trap / Viking
     if (dayOfWeek === 2 || dayOfWeek === 4) {
         activeEventsList.push("Viking Vengeance", "Bear Hunt");
         activeCardKeys.push("viking", "bear");
     } else if (dayOfWeek === 1 || dayOfWeek === 5) {
-        // Segundas e Sextas com Mobilização / Championship
         activeEventsList.push("Alliance Mobilization");
         activeCardKeys.push("mobi", "championship");
     } else {
-        // Padrão nos restantes dias
         activeEventsList.push("Bear Hunt", "Viking Vengeance");
         activeCardKeys.push("bear", "viking");
     }
 
-    // Atualiza o Emblema do Header
     const eventsText = activeEventsList.length > 0 ? ` • Active: ${activeEventsList.join(', ')}` : '';
     if (badge) {
         badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}${eventsText}`;
     }
 
-    // RENDERIZAÇÃO DINÂMICA DOS CARTÕES "LIVE NOW"
     if (liveEventsGrid && activeCardKeys.length > 0) {
         liveEventsGrid.innerHTML = activeCardKeys.map(key => {
             const card = EVENT_CARDS[key];
@@ -146,7 +146,6 @@ async function initKingdomData() {
         }).join('');
     }
 
-    // Renderiza o Resumo da Timeline
     if (summaryContainer) {
         summaryContainer.innerHTML = `
             <div class="card" style="border-left: 4px solid var(--accent-gold); padding: 18px 20px;">
@@ -158,7 +157,6 @@ async function initKingdomData() {
         `;
     }
 
-    // Renderiza a Timeline Roadmap Completa
     if (roadmapContainer) {
         let roadmapHtml = '';
         let foundCurrent = false;
@@ -200,16 +198,4 @@ async function initKingdomData() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    initKingdomData();
-
-    // Sombra no Header ao fazer Scroll
-    const header = document.querySelector("header");
-    if (header) {
-        window.addEventListener("scroll", () => {
-            header.style.boxShadow = window.scrollY > 20 
-                ? "0 8px 25px rgba(0,0,0,.45)" 
-                : "0 6px 18px rgba(0,0,0,.35)";
-        });
-    }
-});
+document.addEventListener("DOMContentLoaded", initKingdomData);
