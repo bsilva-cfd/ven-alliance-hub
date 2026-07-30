@@ -1,10 +1,39 @@
 // ==================================================
-// VEN Alliance Hub - Central Logic & Timeline Engine
+// VEN Alliance Hub - Central Logic & Dynamic Events Engine
 // ==================================================
 
 const MY_KINGDOM_ID = 2166;
 
-// OFFICIAL 46-ITEM KINGDOM TIMELINE
+// Base de Dados dos Cartões de Eventos para Renderização Dinâmica
+const EVENT_CARDS = {
+    viking: {
+        title: "🛡️ Viking Attack Guide",
+        url: "viking-attack.html",
+        desc: "Estratégia de 20 ondas, defesa do QG e reforços de Infantaria para maximizar pontos."
+    },
+    bear: {
+        title: "🐻 Bear Trap Strategy",
+        url: "bear-trap.html",
+        desc: "Otimiza os heróis de rally, formações de entrada e danos na Bear Trap."
+    },
+    mobi: {
+        title: "📋 Alliance Mobilization",
+        url: "alliance-mobilization.html",
+        desc: "Cumpre missões, gere speedups e desbloqueia os baús de metas da aliança."
+    },
+    championship: {
+        title: "🏆 Alliance Championship",
+        url: "alliance-championship.html",
+        desc: "Inscrição no Middle Lane, heróis táticos e rácios de tropas para vitória."
+    },
+    swordland: {
+        title: "🗡️ Swordland Showdown",
+        url: "swordland-showdown.html",
+        desc: "Truques F2P para o hospital, captura de edifícios e meta dos 180K pontos."
+    }
+};
+
+// TIMELINE OFICIAL DO REINO #2166
 const OFFICIAL_TIMELINE = [
     { date: "2026-06-07", title: "Generation 1 Heroes", type: "heroes", desc: "Gen 1 Heroes introduced at kingdom launch." },
     { date: "2026-06-13", title: "First Sanctuary Battle", type: "event", desc: "The first Sanctuary battle opens." },
@@ -54,11 +83,12 @@ const OFFICIAL_TIMELINE = [
     { date: "2028-10-09", title: "Generation 12 Pets", type: "pets", desc: "Gen 12 Pets unlocked." }
 ];
 
-// Initialize Kingdom #2166 Live Data Badge & Timeline Roadmap
+// Função Principal de Inicialização do Reino
 async function initKingdomData() {
     const summaryContainer = document.getElementById('timeline-summary');
     const roadmapContainer = document.getElementById('timeline-roadmap');
     const badge = document.getElementById('kingdom-header-badge');
+    const liveEventsGrid = document.getElementById('live-events-grid');
 
     const openDate = new Date("2026-06-07T11:35:01.000Z");
     const today = new Date();
@@ -66,8 +96,9 @@ async function initKingdomData() {
     const dayOfWeek = today.getDay(); 
 
     let activeEventsList = [];
+    let activeCardKeys = [];
 
-    // Hall of Governors calculation (Reference start: Mon, July 27, 2026)
+    // Cálculo do Ciclo do Hall of Governors (14 Dias)
     const hogReferenceStart = new Date("2026-07-27T00:00:00Z");
     const diffDaysFromRef = Math.floor((today - hogReferenceStart) / (1000 * 60 * 60 * 24));
     const hogCycleDay = ((diffDaysFromRef % 14) + 14) % 14;
@@ -76,27 +107,46 @@ async function initKingdomData() {
         activeEventsList.push(`🏆 Hall of Governors (Day ${hogCycleDay + 1}/6)`);
     }
 
-    try {
-        const res = await fetch('https://kingshotpro.com/data/events.json');
-        const data = await res.json();
-        if (data && data.events) {
-            data.events.forEach(e => {
-                const sched = e.schedule.toLowerCase();
-                if (sched.includes('daily')) activeEventsList.push(e.name);
-                if (sched.includes('tue') && dayOfWeek === 2) activeEventsList.push(e.name);
-                if (sched.includes('thu') && dayOfWeek === 4) activeEventsList.push(e.name);
-            });
-        }
-    } catch (e) {
-        activeEventsList.push("Mystic Trials", "Bear Hunt");
+    // Regras de Eventos por Dia da Semana / Ciclos
+    // Terças (2) e Quintas (4) costumam ter Bear Trap / Viking
+    if (dayOfWeek === 2 || dayOfWeek === 4) {
+        activeEventsList.push("Viking Vengeance", "Bear Hunt");
+        activeCardKeys.push("viking", "bear");
+    } else if (dayOfWeek === 1 || dayOfWeek === 5) {
+        // Segundas e Sextas com Mobilização / Championship
+        activeEventsList.push("Alliance Mobilization");
+        activeCardKeys.push("mobi", "championship");
+    } else {
+        // Padrão nos restantes dias
+        activeEventsList.push("Bear Hunt", "Viking Vengeance");
+        activeCardKeys.push("bear", "viking");
     }
 
+    // Atualiza o Emblema do Header
     const eventsText = activeEventsList.length > 0 ? ` • Active: ${activeEventsList.join(', ')}` : '';
-    
     if (badge) {
         badge.innerText = `Kingdom #${MY_KINGDOM_ID} | Day ${ageDays}${eventsText}`;
     }
 
+    // RENDERIZAÇÃO DINÂMICA DOS CARTÕES "LIVE NOW"
+    if (liveEventsGrid && activeCardKeys.length > 0) {
+        liveEventsGrid.innerHTML = activeCardKeys.map(key => {
+            const card = EVENT_CARDS[key];
+            if (!card) return '';
+            return `
+                <a href="${card.url}" class="home-card">
+                    <div>
+                        <span class="badge live">LIVE NOW</span>
+                        <h3>${card.title}</h3>
+                        <p>${card.desc}</p>
+                    </div>
+                    <div style="margin-top:15px; color:var(--accent-gold); font-weight:bold; font-size:0.85rem;">Read Guide →</div>
+                </a>
+            `;
+        }).join('');
+    }
+
+    // Renderiza o Resumo da Timeline
     if (summaryContainer) {
         summaryContainer.innerHTML = `
             <div class="card" style="border-left: 4px solid var(--accent-gold); padding: 18px 20px;">
@@ -108,6 +158,7 @@ async function initKingdomData() {
         `;
     }
 
+    // Renderiza a Timeline Roadmap Completa
     if (roadmapContainer) {
         let roadmapHtml = '';
         let foundCurrent = false;
@@ -152,7 +203,7 @@ async function initKingdomData() {
 document.addEventListener("DOMContentLoaded", () => {
     initKingdomData();
 
-    // Sticky Header Box Shadow
+    // Sombra no Header ao fazer Scroll
     const header = document.querySelector("header");
     if (header) {
         window.addEventListener("scroll", () => {
