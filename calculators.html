@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance Calculators & Tools - VEN Alliance Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Specific Calculator Component Styles */
+        .mode-tab-group {
+            display: flex;
+            background-color: var(--card-inner);
+            border-radius: 8px;
+            padding: 4px;
+            margin-bottom: 20px;
+        }
+
+        .mode-tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+
+        .mode-tab-btn.active {
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            font-weight: bold;
+        }
+
+        .selection-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            text-align: center;
+        }
+
+        .selection-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .level-indicator {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #fff;
+        }
+
+        .stars-container {
+            display: flex;
+            gap: 12px;
+            margin: 6px 0;
+            cursor: pointer;
+        }
+
+        .star-icon {
+            width: 38px;
+            height: 38px;
+            transition: transform 0.15s;
+        }
+
+        .star-icon:hover { transform: scale(1.18); }
+        .star-icon.filled { filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4)); }
+
+        .tier-selector {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .tier-btn {
+            background: var(--card-inner);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.15s;
+        }
+
+        .tier-btn.active {
+            background: var(--accent-gold);
+            color: #000;
+            border-color: var(--accent-gold);
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-gold);
+            border: none;
+            border-radius: 8px;
+            color: var(--sidebar-bg);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.25s;
+            font-family: var(--font-header);
+        }
+
+        .action-btn:hover { background-color: var(--accent-gold-hover); transform: translateY(-2px); }
+
+        .shards-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .shards-input {
+            background: var(--card-inner);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            width: 220px;
+        }
+
+        .result-box {
+            background-color: var(--card-inner);
+            border: 1px solid var(--accent-gold);
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .result-box h2 {
+            margin: 5px 0 0 0;
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            font-family: var(--font-header);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .input-group input, .input-group select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-inner);
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: var(--font-body);
+        }
+
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; }
+
+        .pet-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .pet-stat-card {
+            background: var(--card-inner);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- SVG Half Star Gradient Definition -->
+<svg width="0" height="0" style="position:absolute;">
+  <linearGradient id="half-grad-hub" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="50%" stop-color="#d4af37" />
+    <stop offset="50%" stop-color="#374151" />
+  </linearGradient>
+</svg>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">VEN Alliance Hub</a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            
+            <div class="dropdown">
+                <a href="#">Alliance ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="ven-notices.html">📢 Alliance Notices</a>
+                        <a href="rank-structure.html">👑 Rank Structure</a>
+                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Events & Guides ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
+                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
+                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
+                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
+                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Database & Tools ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
+                        <a href="calculators.html">🧮 Alliance Calculators</a>
+                        <a href="glossary.html">📖 Game Glossary</a>
+                        <a href="gift-codes.html">🎁 Gift Codes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="content-page">
+
+    <div class="card">
+        <h1>🧮 Alliance Tools & Calculators</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 15px;">Select a specialized tool below to optimize your hero upgrades, pet leveling, KvK points, and troop training.</p>
+
+        <!-- Sub Navigation Tabs -->
+        <div class="sub-nav-tabs">
+            <button class="sub-tab-btn active" onclick="openSubTab('calc-shards', this)">⭐ Hero Shards</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-pets', this)">🐾 Pet XP & Food</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-kvk', this)">⚔️ KvK Score</button>
+            <button class="sub-tab-btn" onclick="openSubTab('calc-troops', this)">🏹 Troop Training</button>
+        </div>
+
+        <!-- Tool 1: Hero Shards Calculator -->
+        <div id="calc-shards" class="sub-tab-content active">
+            <div class="mode-tab-group">
+                <button class="mode-tab-btn active" id="tab-needed" onclick="setMode('needed')">Calculate Shards Needed</button>
+                <button class="mode-tab-btn" id="tab-possible" onclick="setMode('possible')">Calculate Possible Stars</button>
+            </div>
+
+            <!-- View 1: Calculate Shards Needed -->
+            <div id="mode-needed-view" class="selection-section">
+                <div class="selection-row">
+                    <span class="label" style="font-size:0.85rem; color:var(--text-muted);">Current Star Level</span>
+                    <div id="current-text" class="level-indicator">0 Star - 0 Level</div>
+                    <div class="stars-container" id="current-stars"></div>
+                    <div class="tier-selector">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Sub-tier:</span>
+                        <div id="current-tiers" style="display:flex; gap:4px;"></div>
+                    </div>
+                </div>
+
+                <div class="selection-row">
+                    <span class="label" style="font-size:0.85rem; color:var(--text-muted);">Target Star Level</span>
+                    <div id="target-text" class="level-indicator">1 Star - 0 Level</div>
+                    <div class="stars-container" id="target-stars"></div>
+                    <div class="tier-selector">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Sub-tier:</span>
+                        <div id="target-tiers" style="display:flex; gap:4px;"></div>
+                    </div>
+                </div>
+
+                <button class="action-btn" onclick="calculateNeeded()">Calculate Shards Needed</button>
+            </div>
+
+            <!-- View 2: Calculate Possible Stars -->
+            <div id="mode-possible-view" class="selection-section" style="display: none;">
+                <div class="shards-input-group">
+                    <label style="font-size:0.85rem; color:var(--text-muted);" for="available-shards">Available Shards in Inventory</label>
+                    <input type="number" id="available-shards" class="shards-input" placeholder="e.g. 150" value="0">
+                </div>
+                
+                <div class="selection-row">
+                    <span style="font-size:0.85rem; color:var(--text-muted);">Starting From Level</span>
+                    <div id="start-text" class="level-indicator">0 Star - 0 Level</div>
+                    <div class="stars-container" id="start-stars"></div>
+                    <div class="tier-selector">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Sub-tier:</span>
+                        <div id="start-tiers" style="display:flex; gap:4px;"></div>
+                    </div>
+                </div>
+
+                <button class="action-btn" onclick="calculatePossible()">Calculate Reachable Star Level</button>
+            </div>
+
+            <div id="hero-result-box" class="result-box" style="display: none;"></div>
+
+            <!-- Star Level Cost Reference Table -->
+            <div style="margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 4px;">Star Level Costs Matrix</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Universal shard requirements per tier level (Total: 1,065 Shards).</p>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Star Level</th>
+                                <th>Tier 1</th>
+                                <th>Tier 2</th>
+                                <th>Tier 3</th>
+                                <th>Tier 4</th>
+                                <th>Tier 5</th>
+                                <th>Tier 6</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matrix-body"></tbody>
+                    </table>
+                </div>
+
+                <div class="total-row">
+                    <span>Total for Max Level (5 Stars):</span>
+                    <span>1,065 Shards</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 2: Pet XP & Food Calculator -->
+        <div id="calc-pets" class="sub-tab-content">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Pet Rarity:</label>
+                    <select id="pet-rarity" onchange="calculatePetXP()">
+                        <option value="mythic">Mythic Pet</option>
+                        <option value="epic" selected>Epic Pet</option>
+                        <option value="rare">Rare Pet</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Current Pet Level:</label>
+                    <input type="number" id="pet-current-lvl" value="1" min="1" max="100" oninput="calculatePetXP()">
+                </div>
+                <div class="input-group">
+                    <label>Target Pet Level:</label>
+                    <input type="number" id="pet-target-lvl" value="50" min="1" max="100" oninput="calculatePetXP()">
+                </div>
+            </div>
+
+            <div class="result-box">
+                <span>Total XP Needed:</span>
+                <h2 id="pet-total-xp">0 XP</h2>
+                
+                <div class="pet-stats-grid">
+                    <div class="pet-stat-card">
+                        <small style="color: var(--text-muted);">Common Food (100 XP)</small>
+                        <h4 id="pet-food-common" style="margin: 5px 0 0 0; color: #fff;">0</h4>
+                    </div>
+                    <div class="pet-stat-card">
+                        <small style="color: var(--text-muted);">Advanced Food (1k XP)</small>
+                        <h4 id="pet-food-adv" style="margin: 5px 0 0 0; color: var(--accent-gold);">0</h4>
+                    </div>
+                </div>
+                <p id="pet-milestone-info" style="font-size: 0.85rem; color: var(--warning); margin-top: 12px;"></p>
+            </div>
+        </div>
+
+        <!-- Tool 3: KvK Score Simulator -->
+        <div id="calc-kvk" class="sub-tab-content">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Prep Day Focus:</label>
+                    <select id="kvk-day" onchange="calculateKvK()">
+                        <option value="train">Day 1: Troop Training</option>
+                        <option value="tech">Day 2: Research & Building</option>
+                        <option value="speedup">Day 4: Speedups Sprint</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Speedup Hours Saved:</label>
+                    <input type="number" id="speedup-hours" placeholder="e.g. 150" oninput="calculateKvK()">
+                </div>
+                <div class="input-group">
+                    <label>Gems Saved:</label>
+                    <input type="number" id="gems-amount" placeholder="e.g. 50000" oninput="calculateKvK()">
+                </div>
+            </div>
+            <div class="result-box">
+                <span>Estimated Points:</span>
+                <h2 id="kvk-score">0 Points</h2>
+            </div>
+        </div>
+
+        <!-- Tool 4: Troop Training Calculator -->
+        <div id="calc-troops" class="sub-tab-content">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Troop Tier:</label>
+                    <select id="troop-tier" onchange="calculateTroops()">
+                        <option value="12">Tier 12 (T12)</option>
+                        <option value="11">Tier 11 (T11)</option>
+                        <option value="10" selected>Tier 10 (T10)</option>
+                        <option value="9">Tier 9 (T9)</option>
+                        <option value="8">Tier 8 (T8)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Number of Troops:</label>
+                    <input type="number" id="troop-count" placeholder="e.g. 10000" oninput="calculateTroops()">
+                </div>
+            </div>
+            <div class="result-box">
+                <span>Event Points Generated:</span>
+                <h2 id="troop-points">0 Points</h2>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+</footer>
+
+<script src="script.js"></script>
+<script>
+    // Sub-tab Navigation
+    function openSubTab(subTabId, btn) {
+        document.querySelectorAll('.sub-tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(subTabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // --- 1. HERO SHARDS CALCULATOR ENGINE ---
+    const MATRIX = [
+        [1, 1, 2, 2, 2, 2],        // Star 1 (Total: 10)
+        [5, 5, 5, 5, 5, 15],       // Star 2 (Total: 40)
+        [15, 15, 15, 15, 15, 40],  // Star 3 (Total: 115)
+        [40, 40, 40, 40, 40, 100], // Star 4 (Total: 300)
+        [100, 100, 100, 100, 100, 100] // Star 5 (Total: 600)
+    ];
+
+    const FLAT_COSTS = MATRIX.flat(); // 30 steps total
+
+    let currentStep = 0;   
+    let targetStep = 6;    
+    let startStepMode2 = 0;
+
+    function stepToText(step) {
+        if (step >= 30) return "5 Star - 0 Level (Max)";
+        const majorStar = Math.floor(step / 6);
+        const subLevel = step % 6;
+        return `${majorStar} Star - ${subLevel} Level`;
+    }
+
+    function renderStarRow(containerId, activeStep, onClickStarHandlerName) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+        
+        const majorStar = Math.floor(activeStep / 6);
+        const subLevel = activeStep % 6;
+
+        for (let i = 1; i <= 5; i++) {
+            let fillPercent = 0;
+            if (i <= majorStar) {
+                fillPercent = 100;
+            } else if (i === majorStar + 1) {
+                fillPercent = Math.round((subLevel / 6) * 100);
+            } else {
+                fillPercent = 0;
+            }
+
+            const gradId = `${containerId}-grad-${i}`;
+            const fillStyle = fillPercent === 100 ? '#d4af37' : (fillPercent === 0 ? '#374151' : `url(#${gradId})`);
+
+            const svgHtml = `
+                <svg class="star-icon ${fillPercent === 100 ? 'filled' : ''}" viewBox="0 0 24 24" onclick="${onClickStarHandlerName}(${i})">
+                    <defs>
+                        <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="${fillPercent}%" stop-color="#d4af37" />
+                            <stop offset="${fillPercent}%" stop-color="#374151" />
+                        </linearGradient>
+                    </defs>
+                    <path fill="${fillStyle}" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            `;
+            container.insertAdjacentHTML('beforeend', svgHtml);
+        }
+    }
+
+    function renderTierSelector(containerId, activeStep, onSelectTier) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+        const currentSubTier = activeStep % 6;
+
+        for (let t = 0; t <= 6; t++) {
+            const btn = document.createElement("button");
+            btn.className = `tier-btn ${currentSubTier === t ? 'active' : ''}`;
+            btn.innerText = t;
+            btn.onclick = () => onSelectTier(t);
+            container.appendChild(btn);
+        }
+    }
+
+    function handleCurrentStarClick(starIndex) {
+        const currentSub = currentStep % 6;
+        currentStep = (starIndex - 1) * 6 + currentSub;
+        updateHeroCalculatorUI();
+    }
+
+    function handleTargetStarClick(starIndex) {
+        const targetSub = targetStep % 6;
+        targetStep = Math.min(30, (starIndex - 1) * 6 + targetSub);
+        updateHeroCalculatorUI();
+    }
+
+    function handleStartStarClick(starIndex) {
+        const startSub = startStepMode2 % 6;
+        startStepMode2 = (starIndex - 1) * 6 + startSub;
+        updateHeroCalculatorUI();
+    }
+
+    function updateHeroCalculatorUI() {
+        document.getElementById("current-text").innerText = stepToText(currentStep);
+        renderStarRow("current-stars", currentStep, "handleCurrentStarClick");
+        renderTierSelector("current-tiers", currentStep, (tier) => {
+            const starBase = Math.floor(currentStep / 6) * 6;
+            currentStep = Math.min(30, starBase + tier);
+            updateHeroCalculatorUI();
+        });
+
+        document.getElementById("target-text").innerText = stepToText(targetStep);
+        renderStarRow("target-stars", targetStep, "handleTargetStarClick");
+        renderTierSelector("target-tiers", targetStep, (tier) => {
+            const starBase = Math.floor(targetStep / 6) * 6;
+            targetStep = Math.min(30, starBase + tier);
+            updateHeroCalculatorUI();
+        });
+
+        document.getElementById("start-text").innerText = stepToText(startStepMode2);
+        renderStarRow("start-stars", startStepMode2, "handleStartStarClick");
+        renderTierSelector("start-tiers", startStepMode2, (tier) => {
+            const starBase = Math.floor(startStepMode2 / 6) * 6;
+            startStepMode2 = Math.min(30, starBase + tier);
+            updateHeroCalculatorUI();
+        });
+    }
+
+    function calculateNeeded() {
+        const resultBox = document.getElementById("hero-result-box");
+        resultBox.style.display = "block";
+
+        if (targetStep <= currentStep) {
+            resultBox.innerText = "Target level must be higher than current level!";
+            resultBox.style.color = "var(--danger)";
+            return;
+        }
+
+        let totalShards = 0;
+        for (let i = currentStep; i < targetStep; i++) {
+            totalShards += FLAT_COSTS[i];
+        }
+
+        resultBox.style.color = "var(--accent-gold)";
+        resultBox.innerText = `Required Shards: ${totalShards.toLocaleString()} Shards`;
+    }
+
+    function calculatePossible() {
+        const available = parseInt(document.getElementById("available-shards").value) || 0;
+        const resultBox = document.getElementById("hero-result-box");
+        resultBox.style.display = "block";
+
+        let rem = available;
+        let step = startStepMode2;
+
+        while (step < 30 && rem >= FLAT_COSTS[step]) {
+            rem -= FLAT_COSTS[step];
+            step++;
+        }
+
+        resultBox.style.color = "var(--accent-gold)";
+        resultBox.innerText = `Reachable Level: ${stepToText(step)} (Remaining Shards: ${rem})`;
+    }
+
+    function setMode(mode) {
+        document.getElementById("tab-needed").classList.toggle("active", mode === "needed");
+        document.getElementById("tab-possible").classList.toggle("active", mode === "possible");
+        document.getElementById("mode-needed-view").style.display = mode === "needed" ? "flex" : "none";
+        document.getElementById("mode-possible-view").style.display = mode === "possible" ? "flex" : "none";
+        document.getElementById("hero-result-box").style.display = "none";
+    }
+
+    function populateMatrixTable() {
+        const tbody = document.getElementById("matrix-body");
+        tbody.innerHTML = "";
+        
+        MATRIX.forEach((row, idx) => {
+            const tr = document.createElement("tr");
+            const sum = row.reduce((a, b) => a + b, 0);
+            
+            tr.innerHTML = `
+                <td class="star-label">${idx + 1} Star</td>
+                ${row.map(val => `<td>🧩 ${val}</td>`).join('')}
+                <td class="total-col">${sum}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // --- 2. PET XP & FOOD CALCULATOR ---
+    function calculatePetXP() {
+        const rarity = document.getElementById('pet-rarity').value;
+        const currentLvl = parseInt(document.getElementById('pet-current-lvl').value) || 1;
+        const targetLvl = parseInt(document.getElementById('pet-target-lvl').value) || 1;
+
+        if (currentLvl >= targetLvl) {
+            document.getElementById('pet-total-xp').innerText = "0 XP";
+            document.getElementById('pet-food-common').innerText = "0";
+            document.getElementById('pet-food-adv').innerText = "0";
+            document.getElementById('pet-milestone-info').innerText = "Target level reached!";
+            return;
+        }
+
+        const multipliers = { mythic: 1.5, epic: 1.0, rare: 0.75 };
+        const mult = multipliers[rarity] || 1.0;
+
+        let totalXP = 0;
+        for (let lvl = currentLvl; lvl < targetLvl; lvl++) {
+            let baseLvlXP = 150 + (lvl * 80) + Math.pow(lvl, 1.6) * 12;
+            totalXP += Math.floor(baseLvlXP * mult);
+        }
+
+        const commonFood = Math.ceil(totalXP / 100);
+        const advFood = Math.ceil(totalXP / 1000);
+
+        document.getElementById('pet-total-xp').innerText = totalXP.toLocaleString() + " XP";
+        document.getElementById('pet-food-common').innerText = commonFood.toLocaleString();
+        document.getElementById('pet-food-adv').innerText = advFood.toLocaleString();
+
+        const milestones = [20, 40, 60, 80, 100];
+        const nextMilestone = milestones.find(m => m > currentLvl && m <= targetLvl);
+        
+        if (nextMilestone) {
+            document.getElementById('pet-milestone-info').innerText = `🔥 Reaching Lv ${targetLvl} unlocks Passive Skill Slot / Tier at Lv ${nextMilestone}!`;
+        } else {
+            document.getElementById('pet-milestone-info').innerText = `✨ Increases raw stats & combat effectiveness for your marches.`;
+        }
+    }
+
+    // --- 3. KVK & TROOP CALCULATORS ---
+    function calculateKvK() {
+        const hours = parseFloat(document.getElementById('speedup-hours').value) || 0;
+        const gems = parseFloat(document.getElementById('gems-amount').value) || 0;
+        const day = document.getElementById('kvk-day').value;
+
+        let multiplier = 30; 
+        if (day === 'tech') multiplier = 40;
+
+        const total = (hours * 60 * multiplier) + (gems * 2);
+        document.getElementById('kvk-score').innerText = total.toLocaleString() + " Points";
+    }
+
+    function calculateTroops() {
+        const tier = parseInt(document.getElementById('troop-tier').value);
+        const count = parseInt(document.getElementById('troop-count').value) || 0;
+
+        const pointValues = { 12: 100, 11: 75, 10: 50, 9: 35, 8: 20 };
+        const total = count * (pointValues[tier] || 10);
+
+        document.getElementById('troop-points').innerText = total.toLocaleString() + " Points";
+    }
+
+    // Init Logic
+    document.addEventListener("DOMContentLoaded", () => {
+        populateMatrixTable();
+        updateHeroCalculatorUI();
+        calculatePetXP();
+    });
+</script>
+</body>
+</html>
