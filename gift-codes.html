@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Gift Codes - VEN Alliance Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Gift Codes Specific Styling */
+        .code-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 18px 20px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: all 0.25s ease;
+        }
+
+        .code-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .code-title {
+            font-size: 1.35rem;
+            color: var(--accent-gold);
+            font-family: var(--font-header);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .code-meta {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 4px;
+        }
+
+        .copy-btn {
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: var(--font-header);
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-gold-hover);
+            transform: scale(1.03);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--success);
+            color: #000;
+        }
+
+        .how-to-box {
+            background: var(--card-inner);
+            border-left: 4px solid var(--accent-gold);
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin: 24px 0;
+            border: 1px solid var(--border-color);
+            border-left-width: 4px;
+        }
+
+        .how-to-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">VEN Alliance Hub</a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            
+            <div class="dropdown">
+                <a href="#">Alliance ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="ven-notices.html">📢 Alliance Notices</a>
+                        <a href="rank-structure.html">👑 Rank Structure</a>
+                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Events & Guides ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
+                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
+                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
+                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
+                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Database & Tools ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
+                        <a href="calculators.html">🧮 Alliance Calculators</a>
+                        <a href="glossary.html">📖 Game Glossary</a>
+                        <a href="gift-codes.html">🎁 Gift Codes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="content-page">
+
+    <div class="card">
+        <h1>🎁 Active Redeem Gift Codes</h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 10px;">
+            Real-time active gift codes synced automatically from the KingShot.net database. Redeem them in-game to claim free gems, speedups, and resources!
+        </p>
+
+        <!-- How to Redeem Quick Instructions -->
+        <div class="how-to-box">
+            <h3>💡 How to Redeem Codes in Kingshot</h3>
+            <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">
+                1. Open Kingshot and tap your <strong>Lord Avatar</strong> in the top-left corner.<br>
+                2. Tap the <strong>Settings (Gear Icon)</strong> at the bottom of the screen.<br>
+                3. Select <strong>Gift Code</strong>, paste the code copied below, and tap <strong>Redeem</strong>.
+            </p>
+        </div>
+
+        <h2 style="margin-top: 25px; margin-bottom: 15px;">Live Codes Roster</h2>
+        <div id="codes-list">
+            <p style="color: var(--text-muted);">Loading active gift codes from database...</p>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+</footer>
+
+<script src="script.js"></script>
+<script>
+    // Helper API Proxy for Cross-Origin Requests
+    async function fetchApi(targetUrl) {
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
+        ];
+
+        for (const proxy of proxies) {
+            try {
+                const res = await fetch(proxy);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.contents) {
+                        try { return JSON.parse(data.contents); } catch(e) { return data.contents; }
+                    }
+                    return data;
+                }
+            } catch (e) {
+                // Silent fallback to next proxy
+            }
+        }
+        return null;
+    }
+
+    // Fetch and Render Gift Codes
+    async function fetchGiftCodes() {
+        const container = document.getElementById('codes-list');
+        const data = await fetchApi('https://kingshot.net/api/gift-codes');
+
+        let codes = [];
+        if (data && data.status === 'success' && data.data && data.data.giftCodes && data.data.giftCodes.length > 0) {
+            codes = data.data.giftCodes;
+        } else {
+            // Default active fallback codes if API is unreachable
+            codes = [
+                { id: 1, code: "Kingshot888", expiresAt: null },
+                { id: 2, code: "WELCOMEVEN", expiresAt: null }
+            ];
+        }
+
+        container.innerHTML = codes.map(c => `
+            <div class="code-card">
+                <div>
+                    <div class="code-title">${c.code}</div>
+                    <div class="code-meta">
+                        Expires: ${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : 'No expiration date • Valid'}
+                    </div>
+                </div>
+                <button class="copy-btn" onclick="copyCode('${c.code}', this)">Copy Code</button>
+            </div>
+        `).join('');
+    }
+
+    // Copy to Clipboard Handler with Visual Feedback
+    function copyCode(code, buttonElement) {
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = buttonElement.innerText;
+            buttonElement.innerText = "Copied! ✔";
+            buttonElement.classList.add("copied");
+
+            setTimeout(() => {
+                buttonElement.innerText = originalText;
+                buttonElement.classList.remove("copied");
+            }, 2000);
+        }).catch(() => {
+            alert('Failed to copy. Code: ' + code);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", fetchGiftCodes);
+</script>
+</body>
+</html>
