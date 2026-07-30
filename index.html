@@ -8,52 +8,43 @@
 </head>
 <body>
 
-<header>
-    <nav>
-        <a href="index.html" class="logo">VEN Alliance Hub</a>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            
-            <div class="dropdown">
-                <a href="#">Alliance ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="ven-notices.html">📢 Alliance Notices</a>
-                        <a href="rank-structure.html">👑 Rank Structure</a>
-                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
-                    </div>
-                </div>
-            </div>
+<div class="mobile-header">
+    <div class="brand-title">VEN HUB</div>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+</div>
 
-            <div class="dropdown">
-                <a href="#">Events & Guides ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
-                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
-                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
-                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
-                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
-                    </div>
-                </div>
-            </div>
+<aside class="sidebar" id="sidebar">
+    <div class="brand-section">
+        <div class="brand-title">VEN ALLIANCE</div>
+        <div class="brand-sub">Kingdom #2166 Command Center</div>
+    </div>
 
-            <div class="dropdown">
-                <a href="#">Database & Tools ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
-                        <a href="calculators.html">🧮 Alliance Calculators</a>
-                        <a href="glossary.html">📖 Game Glossary</a>
-                        <a href="gift-codes.html">🎁 Gift Codes</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <nav class="nav-menu">
+        <div class="nav-group-title">Main Dashboard</div>
+        <a href="index.html" class="nav-item active">🏠 Home / Overview</a>
+        <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
+        <a href="calculators.html" class="nav-item">🧮 Calculators</a>
+        <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+
+        <div class="nav-group-title">Alliance Info</div>
+        <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
+        <a href="rank-structure.html" class="nav-item">👑 Rank Structure</a>
+
+        <div class="nav-group-title">Alliance Guides</div>
+        <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
+        <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
+        <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
+        <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
+        <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
+        <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+
+        <div class="nav-group-title">Database & Tools</div>
+        <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
+        <a href="gift-codes.html" class="nav-item">🎁 Gift Codes</a>
     </nav>
-</header>
+</aside>
 
-<main class="content-page">
+<main class="main-content">
 
     <!-- Live Kingdom Status Header -->
     <div class="top-status-bar">
@@ -74,10 +65,10 @@
         </div>
     </div>
 
-    <!-- Current Live Events Grid (Totalmente Dinâmico via script.js) -->
+    <!-- Current Live Events Grid (Dynamic via script.js) -->
     <h2 style="font-family: var(--font-header); font-size: 1.3rem; margin-bottom: 15px; border-left: 4px solid var(--accent-gold); padding-left: 10px;">🔥 Current Live Events</h2>
     <div id="live-events-grid" class="home-grid">
-        <!-- Renderizado dinamicamente pelo script.js -->
+        <!-- Rendered dynamically by script.js -->
     </div>
 
     <!-- Upcoming & Featured Warfare Grid -->
@@ -111,19 +102,11 @@
         </a>
     </div>
 
-    <!-- Official Kingdom Timeline Roadmap -->
-    <div class="card" style="margin-top: 35px;">
-        <h2>🏛️ Kingdom #2166 Official Timeline</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;">Synchronized live progression schedule based on KingShot.net database.</p>
-        <div id="timeline-summary" style="margin-top: 15px;"></div>
-        <div id="timeline-roadmap" class="timeline-container">Loading official schedule...</div>
-    </div>
+    <footer>
+        VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+    </footer>
 
 </main>
-
-<footer>
-    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
-</footer>
 
 <script src="script.js"></script>
 </body>
