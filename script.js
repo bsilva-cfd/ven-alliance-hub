@@ -1,10 +1,10 @@
 // ==================================================
-// VEN Alliance Hub - Central Logic & Dynamic Events Engine
+// VEN Alliance Hub - Central Engine & Collapsible Navigation
 // ==================================================
 
 const MY_KINGDOM_ID = 2166;
 
-// Dynamic Event Cards Database (All English)
+// Dynamic Event Cards Database
 const EVENT_CARDS = {
     viking: {
         title: "🛡️ Viking Attack Guide",
@@ -83,13 +83,24 @@ const OFFICIAL_TIMELINE = [
     { date: "2028-10-09", title: "Generation 12 Pets", type: "pets", desc: "Gen 12 Pets unlocked." }
 ];
 
-// Toggle Mobile Sidebar
+// Toggle Mobile Drawer
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) sidebar.classList.toggle('open');
 }
 
-// Kingdom Operations & Event Rendering
+// Toggle Accordion Group in Sidebar
+function toggleNavGroup(groupId) {
+    const group = document.getElementById(groupId);
+    const arrow = document.getElementById(groupId + '-arrow');
+    if (group) {
+        const isHidden = group.style.display === 'none';
+        group.style.display = isHidden ? 'flex' : 'none';
+        if (arrow) arrow.innerText = isHidden ? '▾' : '▸';
+    }
+}
+
+// Kingdom Operations & Dynamic Event Rendering
 async function initKingdomData() {
     const summaryContainer = document.getElementById('timeline-summary');
     const roadmapContainer = document.getElementById('timeline-roadmap');
@@ -148,9 +159,9 @@ async function initKingdomData() {
 
     if (summaryContainer) {
         summaryContainer.innerHTML = `
-            <div class="card" style="border-left: 4px solid var(--accent-gold); padding: 18px 20px;">
+            <div class="card" style="border-left: 4px solid var(--accent-gold); padding: 16px 20px;">
                 <h3 style="margin:0; font-family: var(--font-header);">Kingdom #${MY_KINGDOM_ID} Server Status</h3>
-                <p style="margin: 5px 0 0 0; color: var(--text-muted);">
+                <p style="margin: 4px 0 0 0; color: var(--text-muted);">
                     Server Opened: <strong>07-06-2026</strong> | Server Age: <strong style="color: var(--accent-gold);">${ageDays} Days Old</strong>
                 </p>
             </div>
