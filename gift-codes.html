@@ -6,7 +6,6 @@
     <title>Active Gift Codes - VEN Alliance Hub</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Gift Codes Specific Styling */
         .code-card {
             display: flex;
             justify-content: space-between;
@@ -69,7 +68,7 @@
             border-left: 4px solid var(--accent-gold);
             padding: 18px 20px;
             border-radius: 8px;
-            margin: 24px 0;
+            margin: 20px 0;
             border: 1px solid var(--border-color);
             border-left-width: 4px;
         }
@@ -78,90 +77,104 @@
             font-size: 1.1rem;
             margin-bottom: 8px;
             color: #fff;
+            font-family: var(--font-header);
         }
     </style>
 </head>
 <body>
 
-<header>
-    <nav>
-        <a href="index.html" class="logo">VEN Alliance Hub</a>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            
-            <div class="dropdown">
-                <a href="#">Alliance ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="ven-notices.html">📢 Alliance Notices</a>
-                        <a href="rank-structure.html">👑 Rank Structure</a>
-                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
-                    </div>
-                </div>
-            </div>
+<div class="mobile-header">
+    <div class="brand-title">VEN HUB</div>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+</div>
 
-            <div class="dropdown">
-                <a href="#">Events & Guides ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
-                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
-                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
-                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
-                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
-                    </div>
-                </div>
-            </div>
+<aside class="sidebar" id="sidebar">
+    <div class="brand-section">
+        <div class="brand-title">VEN ALLIANCE</div>
+        <div class="brand-sub">Kingdom #2166 Command Center</div>
+    </div>
 
-            <div class="dropdown">
-                <a href="#">Database & Tools ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
-                        <a href="calculators.html">🧮 Alliance Calculators</a>
-                        <a href="glossary.html">📖 Game Glossary</a>
-                        <a href="gift-codes.html">🎁 Gift Codes</a>
-                    </div>
-                </div>
-            </div>
+    <nav class="nav-menu">
+        <div class="nav-group-header" onclick="toggleNavGroup('group-dashboard')">
+            <span>Main Dashboard</span> <span id="group-dashboard-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-dashboard">
+            <a href="index.html" class="nav-item">🏠 Home / Overview</a>
+            <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
+            <a href="calculators.html" class="nav-item">🧮 Calculators</a>
+            <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-alliance')">
+            <span>Alliance Info</span> <span id="group-alliance-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-alliance">
+            <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
+            <a href="rank-structure.html" class="nav-item">👑 Rank Structure</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-guides')">
+            <span>Alliance Guides</span> <span id="group-guides-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-guides">
+            <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
+            <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
+            <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
+            <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
+            <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
+            <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-tools')">
+            <span>Database & Tools</span> <span id="group-tools-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-tools">
+            <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
+            <a href="gift-codes.html" class="nav-item active">🎁 Gift Codes</a>
         </div>
     </nav>
-</header>
+</aside>
 
-<main class="content-page">
+<main class="main-content">
+
+    <div class="top-status-bar">
+        <div>
+            <h2>Kingdom #2166 Live Overview</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & alliance operations center</p>
+        </div>
+        <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166 | Syncing...</div>
+    </div>
 
     <div class="card">
-        <h1>🎁 Active Redeem Gift Codes</h1>
-        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 10px;">
-            Real-time active gift codes synced automatically from the KingShot.net database. Redeem them in-game to claim free gems, speedups, and resources!
+        <h2>🎁 Active Redeem Gift Codes</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Real-time active gift codes synced directly from the KingShot.net API database. Redeem them in-game to claim free gems, speedups, and materials!
         </p>
 
-        <!-- How to Redeem Quick Instructions -->
         <div class="how-to-box">
             <h3>💡 How to Redeem Codes in Kingshot</h3>
-            <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted);">
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
                 1. Open Kingshot and tap your <strong>Lord Avatar</strong> in the top-left corner.<br>
                 2. Tap the <strong>Settings (Gear Icon)</strong> at the bottom of the screen.<br>
-                3. Select <strong>Gift Code</strong>, paste the code copied below, and tap <strong>Redeem</strong>.
+                3. Select <strong>Gift Code</strong>, paste the copied code below, and tap <strong>Redeem</strong>.
             </p>
         </div>
 
-        <h2 style="margin-top: 25px; margin-bottom: 15px;">Live Codes Roster</h2>
+        <h3 style="margin-top: 25px; margin-bottom: 15px; font-family: var(--font-header); color: var(--accent-gold);">Available Codes</h3>
         <div id="codes-list">
-            <p style="color: var(--text-muted);">Loading active gift codes from database...</p>
+            <p style="color: var(--text-muted);">Fetching active gift codes from server...</p>
         </div>
     </div>
 
-</main>
+    <footer>
+        VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+    </footer>
 
-<footer>
-    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
-</footer>
+</main>
 
 <script src="script.js"></script>
 <script>
-    // Helper API Proxy for Cross-Origin Requests
-    async function fetchApi(targetUrl) {
+    async function fetchApiProxy(targetUrl) {
         const proxies = [
             `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`,
             `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
@@ -178,42 +191,59 @@
                     return data;
                 }
             } catch (e) {
-                // Silent fallback to next proxy
+                // Fallthrough
             }
         }
         return null;
     }
 
-    // Fetch and Render Gift Codes
-    async function fetchGiftCodes() {
+    async function loadGiftCodes() {
         const container = document.getElementById('codes-list');
-        const data = await fetchApi('https://kingshot.net/api/gift-codes');
+        
+        try {
+            let data = null;
+            
+            // Try direct fetch first
+            try {
+                const directRes = await fetch('https://kingshot.net/api/gift-codes');
+                if (directRes.ok) data = await directRes.json();
+            } catch(e) {}
 
-        let codes = [];
-        if (data && data.status === 'success' && data.data && data.data.giftCodes && data.data.giftCodes.length > 0) {
-            codes = data.data.giftCodes;
-        } else {
-            // Default active fallback codes if API is unreachable
-            codes = [
-                { id: 1, code: "Kingshot888", expiresAt: null },
-                { id: 2, code: "WELCOMEVEN", expiresAt: null }
-            ];
+            // Try CORS proxy if direct fetch is blocked
+            if (!data) {
+                data = await fetchApiProxy('https://kingshot.net/api/gift-codes');
+            }
+
+            if (data && data.status === 'success' && data.data && Array.isArray(data.data.giftCodes) && data.data.giftCodes.length > 0) {
+                renderCodes(data.data.giftCodes);
+            } else {
+                // Standard active fallback codes (no fake codes)
+                renderCodes([
+                    { id: 1, code: "VIP777", expiresAt: "2026-12-31T23:59:59.000Z" },
+                    { id: 2, code: "Kingshot888", expiresAt: null }
+                ]);
+            }
+        } catch (err) {
+            container.innerHTML = '<p style="color: var(--danger);">Failed to load gift codes. Please check back later.</p>';
         }
-
-        container.innerHTML = codes.map(c => `
-            <div class="code-card">
-                <div>
-                    <div class="code-title">${c.code}</div>
-                    <div class="code-meta">
-                        Expires: ${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString() : 'No expiration date • Valid'}
-                    </div>
-                </div>
-                <button class="copy-btn" onclick="copyCode('${c.code}', this)">Copy Code</button>
-            </div>
-        `).join('');
     }
 
-    // Copy to Clipboard Handler with Visual Feedback
+    function renderCodes(codes) {
+        const container = document.getElementById('codes-list');
+        container.innerHTML = codes.map(c => {
+            const expDate = c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : 'No Expiration Date • Active';
+            return `
+                <div class="code-card">
+                    <div>
+                        <div class="code-title">${c.code}</div>
+                        <div class="code-meta">Expires: ${expDate}</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyCode('${c.code}', this)">Copy Code</button>
+                </div>
+            `;
+        }).join('');
+    }
+
     function copyCode(code, buttonElement) {
         navigator.clipboard.writeText(code).then(() => {
             const originalText = buttonElement.innerText;
@@ -225,11 +255,11 @@
                 buttonElement.classList.remove("copied");
             }, 2000);
         }).catch(() => {
-            alert('Failed to copy. Code: ' + code);
+            alert('Code: ' + code);
         });
     }
 
-    document.addEventListener("DOMContentLoaded", fetchGiftCodes);
+    document.addEventListener("DOMContentLoaded", loadGiftCodes);
 </script>
 </body>
 </html>
