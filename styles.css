@@ -1,5 +1,5 @@
 /* ==================================================
-   VEN Alliance Hub - Central Stylesheet - typos
+   VEN Alliance Hub - Central Stylesheet (Sidebar Layout)
    ================================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@600;700;800&display=swap');
 
@@ -28,8 +28,9 @@ body {
     font-family: var(--font-body);
     background-color: var(--bg-dark);
     color: var(--text-main);
-    line-height: 1.6;
+    display: flex;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
 /* Custom Scrollbar */
@@ -38,88 +39,113 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 20px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-gold-hover); }
 
-/* Header & Navigation */
-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: var(--sidebar-bg);
+/* Mobile Header Navigation Toggle */
+.mobile-header {
+    display: none;
+    background-color: var(--sidebar-bg);
+    padding: 15px 20px;
     border-bottom: 2px solid var(--accent-gold);
-    box-shadow: 0 6px 18px rgba(0,0,0,.35);
-}
-
-nav {
-    max-width: 1200px;
-    margin: auto;
-    padding: 16px 24px;
-    display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
-.logo {
-    font-family: var(--font-header);
-    font-size: 1.4rem;
-    font-weight: 800;
+.menu-toggle {
+    background: transparent;
+    border: 1px solid var(--accent-gold);
     color: var(--accent-gold);
-    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-header);
 }
 
-.nav-links {
+/* Sidebar Navigation Layout */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+.brand-section {
+    padding: 24px 20px;
+    border-bottom: 2px solid var(--accent-gold);
+}
+
+.brand-title {
+    color: var(--accent-gold);
+    font-family: var(--font-header);
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.brand-sub {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+.nav-menu {
+    padding: 15px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-group-title {
+    color: var(--accent-gold);
+    font-family: var(--font-header);
+    font-size: 0.72rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 12px 12px 6px 12px;
+}
+
+.nav-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-.nav-links a, .dropdown > a {
-    display: block;
-    color: var(--text-main);
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: 6px;
+    gap: 12px;
+    padding: 10px 14px;
+    color: var(--text-muted);
+    border-radius: 8px;
+    cursor: pointer;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: all .25s ease;
+    transition: all 0.25s ease;
+    text-decoration: none;
 }
 
-.nav-links a:hover, .dropdown:hover > a {
-    background: var(--accent-gold);
+.nav-item:hover, .nav-item.active {
+    background-color: var(--accent-gold);
     color: var(--sidebar-bg);
     font-weight: bold;
 }
 
-/* Dropdown Menu */
-.dropdown { position: relative; }
-.dropdown-content {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    display: none;
-    min-width: 220px;
-    padding-top: 8px;
-}
-.dropdown-menu {
-    background: var(--card-bg);
-    border: 1px solid var(--accent-gold);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,.45);
-}
-.dropdown-content a {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
-}
-.dropdown-content a:last-child { border-bottom: none; }
-.dropdown:hover .dropdown-content { display: block; }
-
-/* Main Content Container */
-.content-page {
+/* Main Content Area */
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    padding: 30px;
     max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px 60px 20px;
 }
 
-/* Top Status Bar */
+/* Top Live Status Bar */
 .top-status-bar {
     display: flex;
     justify-content: space-between;
@@ -152,13 +178,13 @@ nav {
     font-family: var(--font-header);
 }
 
-/* Cards & Hero Section */
+/* Cards & Hero Banner */
 .card {
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     transition: all 0.3s ease;
 }
 
@@ -275,7 +301,7 @@ nav {
     font-size: 0.92rem;
 }
 
-/* Timeline Components */
+/* Timeline Component Styles */
 .timeline-container {
     position: relative;
     margin-top: 20px;
@@ -379,11 +405,20 @@ th { color: var(--accent-gold); background: var(--card-inner); font-family: var(
 tr:nth-child(even) { background: rgba(255,255,255,.03); }
 
 footer {
-    margin-top: 50px;
-    padding: 30px;
+    margin-top: 40px;
+    padding: 24px;
     text-align: center;
     font-size: 0.85em;
     color: var(--text-muted);
     border-top: 2px solid var(--accent-gold);
     background: var(--sidebar-bg);
+    border-radius: 8px;
+}
+
+/* Mobile Breakpoint */
+@media (max-width: 900px) {
+    .mobile-header { display: flex; }
+    .sidebar { transform: translateX(-100%); top: 60px; }
+    .sidebar.open { transform: translateX(0); }
+    .main-content { margin-left: 0; padding: 80px 15px 20px 15px; }
 }
