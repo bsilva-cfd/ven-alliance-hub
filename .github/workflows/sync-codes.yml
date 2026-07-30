@@ -1,0 +1,24 @@
+name: Sync Gift Codes Every 12 Hours
+
+on:
+  schedule:
+    - cron: '0 */12 * * *' # Runs automatically every 12 hours
+  workflow_dispatch: # Allows manual trigger from GitHub UI
+
+jobs:
+  update-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Active Gift Codes
+        run: |
+          curl -s https://kingshot.net/api/gift-codes > gift-codes.json
+
+      - name: Commit and Push Updated Codes
+        run: |
+          git config --global user.name "VEN Bot"
+          git config --global user.email "bot@venalliance.hub"
+          git add gift-codes.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(data): auto-update active gift codes [skip ci]" && git push)
