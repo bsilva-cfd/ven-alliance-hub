@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Glossary & Dictionary - VEN Alliance Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Glossary Control & Grid Styling */
+        .glossary-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--card-inner);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            font-family: var(--font-body);
+            transition: border-color 0.25s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .filter-pills { 
+            display: flex; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+        }
+
+        .filter-pill {
+            background: var(--card-inner);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+
+        .filter-pill.active, .filter-pill:hover { 
+            background: var(--accent-gold); 
+            color: #000; 
+            border-color: var(--accent-gold); 
+            font-weight: bold;
+        }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 18px;
+        }
+
+        .term-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+        }
+
+        .term-card:hover { 
+            border-color: var(--accent-gold); 
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .term-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            margin-bottom: 10px; 
+            gap: 8px; 
+        }
+
+        .term-title { 
+            font-size: 1.05rem; 
+            font-weight: bold; 
+            color: var(--accent-gold); 
+            font-family: var(--font-header); 
+        }
+
+        .cat-tag { 
+            font-size: 0.65rem; 
+            padding: 2px 8px; 
+            border-radius: 10px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            white-space: nowrap; 
+            font-family: var(--font-header);
+        }
+
+        .cat-tag.combat { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+        .cat-tag.alliance { background: rgba(212, 175, 55, 0.15); color: #fde68a; }
+        .cat-tag.economy { background: rgba(34, 197, 94, 0.15); color: #86efac; }
+        .cat-tag.events { background: rgba(168, 85, 247, 0.15); color: #ddd6fe; }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="logo">VEN Alliance Hub</a>
+        <div class="nav-links">
+            <a href="index.html">🏠 Home</a>
+            
+            <div class="dropdown">
+                <a href="#">Alliance ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="ven-notices.html">📢 Alliance Notices</a>
+                        <a href="rank-structure.html">👑 Rank Structure</a>
+                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Events & Guides ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
+                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
+                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
+                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
+                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <a href="#">Database & Tools ▾</a>
+                <div class="dropdown-content">
+                    <div class="dropdown-menu">
+                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
+                        <a href="calculators.html">🧮 Alliance Calculators</a>
+                        <a href="glossary.html">📖 Game Glossary</a>
+                        <a href="gift-codes.html">🎁 Gift Codes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="content-page">
+
+    <div class="card">
+        <h1>📖 Kingshot Game Glossary</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Master directory of game terms, abbreviations, combat mechanics, and alliance strategies.</p>
+
+        <div class="glossary-controls">
+            <input type="text" id="search-input" class="search-box" placeholder="🔍 Search any term (e.g. Zero, Truegold, Rally Cap, Widget)..." oninput="filterTerms()">
+            <div class="filter-pills">
+                <button class="filter-pill active" onclick="setCategory('all', this)">All Terms</button>
+                <button class="filter-pill" onclick="setCategory('combat', this)">⚔️ Combat & Warfare</button>
+                <button class="filter-pill" onclick="setCategory('alliance', this)">🛡️ Alliance & Social</button>
+                <button class="filter-pill" onclick="setCategory('economy', this)">🏛️ Economy & Growth</button>
+                <button class="filter-pill" onclick="setCategory('events', this)">🏆 Events & Ranks</button>
+            </div>
+        </div>
+
+        <div id="glossary-grid" class="glossary-grid"></div>
+    </div>
+
+</main>
+
+<footer>
+    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+</footer>
+
+<script src="script.js"></script>
+<script>
+    // 50+ COMPLETE GAME GLOSSARY DATA ARRAY
+    const GLOSSARY_DATA = [
+        { term: "Alliance", cat: "alliance", desc: "A group of players who band together for mutual benefit, offering support, resources, and protection." },
+        { term: "Alliance Chest", cat: "alliance", desc: "A reward chest unlocked when alliance members contribute activity points; yields gems, speedups, and rare materials." },
+        { term: "Alliance Help", cat: "alliance", desc: "A mechanic where members click Help on each other's timers, reducing construction and research build times." },
+        { term: "Alliance Mobilization", cat: "alliance", desc: "A cooperative event where alliance members complete tasks to earn points and tier rewards for the group." },
+        { term: "Bear Hunt", cat: "events", desc: "A special event where players hunt down giant bears for rewards, requiring rally coordination and strategy." },
+        { term: "Buff Stack", cat: "combat", desc: "Multiple simultaneous bonuses (hero skills, gear, widgets, research) multiplying damage and stat output in rallies." },
+        { term: "Building Queue", cat: "economy", desc: "A system allowing players to construct or upgrade buildings. A second queue can be unlocked with gems." },
+        { term: "Daily Tasks", cat: "economy", desc: "Objectives resetting every 24 hours. Completing them is the most reliable daily source of free gems and speedups." },
+        { term: "F2P (Free to Play)", cat: "economy", desc: "Players who do not spend real money, relying on strategic time management and event planning to progress." },
+        { term: "Farm Account", cat: "alliance", desc: "A secondary sub-account optimized specifically for resource harvesting and transferring materials to your main city." },
+        { term: "Garrison", cat: "combat", desc: "The defensive formation protecting your city, consisting of designated Defender Heroes and stationed troops." },
+        { term: "Garrison Cap", cat: "combat", desc: "The maximum number of troops allowed to defend your city simultaneously during enemy attacks." },
+        { term: "Gems", cat: "economy", desc: "The primary premium currency used for speeding up processes, VIP levels, and purchasing special shop items." },
+        { term: "Gift Code", cat: "alliance", desc: "Promotional codes distributed by developers that players redeem for free in-game rewards." },
+        { term: "Governor", cat: "economy", desc: "The ruling player in charge of a kingdom, responsible for kingdom titles, development, and defense." },
+        { term: "Governor Gear", cat: "economy", desc: "Equipment that enhances a governor's abilities, providing permanent passive bonuses to city stats." },
+        { term: "Grid Trap", cat: "combat", desc: "A base positioning strategy where weaker cities occupy map grid tiles tightly to prevent enemy rallies from placing near." },
+        { term: "Hall of Governors (HoG)", cat: "events", desc: "A major multi-stage competitive event where players compete for top rankings to earn elite hero shards." },
+        { term: "Hero", cat: "economy", desc: "Special commanders with unique active/passive skills and gear, crucial for leading troops in combat." },
+        { term: "Hero Shards", cat: "economy", desc: "Fragments used to summon new heroes or upgrade existing hero star levels." },
+        { term: "Kingdom (Server)", cat: "economy", desc: "The persistent server realm where players interact, compete, and form alliances." },
+        { term: "Kingdom vs Kingdom (KvK)", cat: "events", desc: "A major cross-server event where entire kingdoms compete against each other for territory and supreme dominance." },
+        { term: "KvK Score", cat: "events", desc: "Points earned during Kingdom vs Kingdom events from kills, captures, and objectives that drive ranking rewards." },
+        { term: "Low Spender", cat: "economy", desc: "Players who spend minimal real money, focusing strictly on high-value monthly passes or growth funds." },
+        { term: "March Queue", cat: "combat", desc: "The total number of separate armies/marches you can send across the world map simultaneously." },
+        { term: "March Speed", cat: "combat", desc: "How fast your troops travel across the map. Affects gathering trips, rally joining windows, and KvK response times." },
+        { term: "Merit", cat: "events", desc: "A currency earned from event participation spent in dedicated event shops for exclusive items." },
+        { term: "Migration", cat: "alliance", desc: "The official process of moving your account to a different kingdom for strategic or social reasons." },
+        { term: "Museum", cat: "economy", desc: "A specialized building displaying artifact cards that grant permanent, kingdom-wide passive stat buffs." },
+        { term: "Peace Shield", cat: "combat", desc: "A time-limited protection bubble preventing other players from scouting or attacking your city." },
+        { term: "Player ID (FID)", cat: "alliance", desc: "Your unique identifier number found under avatar Settings → Player Info. Used for profile lookup and gift codes." },
+        { term: "Rally", cat: "combat", desc: "A coordinated multi-player attack or defense launched by one leader to combine multiple alliance marches." },
+        { term: "Rally Cap", cat: "combat", desc: "The maximum number of total troops allowed to join a single rally, set by the Rally Leader's Embassy level." },
+        { term: "Reinforcement", cat: "alliance", desc: "Sending your troops directly to station inside an ally's city to aid their garrison defense." },
+        { term: "Research", cat: "economy", desc: "Academy technologies that permanently enhance combat, military march size, and economic growth speed." },
+        { term: "Resources", cat: "economy", desc: "Essential materials (Bread, Wood, Stone, Iron, Gold) for builds and troops. Bread is primary food (distinct from Pet Food)." },
+        { term: "Season of Conquest", cat: "events", desc: "A multi-phase recurring competitive event cycle tracking KvK performance across multiple rounds." },
+        { term: "Solo Attack", cat: "combat", desc: "An attack launched directly from a single city without a rally. Fast and immediate, but hero Widgets do not apply." },
+        { term: "Speedups", cat: "economy", desc: "Consumable items that instantly reduce the time required for construction, research, or troop training." },
+        { term: "Swordland Showdown", cat: "events", desc: "A competitive arena event where players face off in combat matches to earn prestige and rewards." },
+        { term: "T1 / T2 / T3 / T4 Troops", cat: "combat", desc: "Different soldier tier levels. T4 represents high-tier advanced military units unlocked via deep research." },
+        { term: "Town Center (TC)", cat: "economy", desc: "The central core building (Levels 1–30, then TG1–TG10). Gates all building levels, troop tiers, and features." },
+        { term: "Trap Account", cat: "combat", desc: "A city intentionally maintaining low visible power while hiding massive high-tier troops to bait and destroy attackers." },
+        { term: "Troop Training", cat: "combat", desc: "The continuous process of recruiting and preparing soldiers for offense and garrison defense." },
+        { term: "Truegold (TG)", cat: "economy", desc: "A rare endgame resource used to upgrade Town Center beyond Level 30 (TG1–TG10). Cannot be rushed with standard speedups." },
+        { term: "Viking Vengeance", cat: "events", desc: "An alliance event where players defend their cities against escalating waves of AI Viking invaders." },
+        { term: "VIP", cat: "economy", desc: "A tier perk system providing continuous active passive bonuses, extra construction queues, and daily chests." },
+        { term: "Warlord", cat: "combat", desc: "A high-power combat leader known for leading major rallies and taking point in server warfare." },
+        { term: "Whale", cat: "economy", desc: "A high-spending player who invests heavily to maximize account progression and dominate leaderboards." },
+        { term: "Widget", cat: "combat", desc: "Special hero gear equipment slots providing bonuses specifically during Rally attacks. Inactive in solo attacks." },
+        { term: "Zero (Zeroed)", cat: "combat", desc: "When all of a player's troops are wiped out, leaving their hospital full and their city entirely defenseless." }
+    ];
+
+    let currentGlossaryCat = 'all';
+
+    function setCategory(cat, btn) {
+        currentGlossaryCat = cat;
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterTerms();
+    }
+
+    function filterTerms() {
+        const query = document.getElementById('search-input').value.toLowerCase().trim();
+        const grid = document.getElementById('glossary-grid');
+        grid.innerHTML = '';
+
+        const filtered = GLOSSARY_DATA.filter(item => {
+            const matchesCat = (currentGlossaryCat === 'all' || item.cat === currentGlossaryCat);
+            const matchesQuery = item.term.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query);
+            return matchesCat && matchesQuery;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding:30px; color:var(--text-muted);">No matching terms found. Try another keyword.</div>`;
+            return;
+        }
+
+        filtered.sort((a,b) => a.term.localeCompare(b.term));
+
+        filtered.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'term-card';
+            card.innerHTML = `
+                <div>
+                    <div class="term-header">
+                        <span class="term-title">${item.term}</span>
+                        <span class="cat-tag ${item.cat}">${item.cat}</span>
+                    </div>
+                    <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.4;">${item.desc}</p>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", filterTerms);
+</script>
+</body>
+</html>
