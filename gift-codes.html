@@ -1,112 +1,253 @@
-const CACHE_KEY = 'ven_gift_codes';
-const TIMESTAMP_KEY = 'ven_gift_codes_time';
-const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Gift Codes - VEN Alliance Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .code-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 18px 20px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 12px;
+            transition: all 0.25s ease;
+        }
 
-async function fetchApiProxy(targetUrl) {
-    const proxies = [
-        `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}&timestamp=${Date.now()}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(targetUrl)}`
-    ];
+        .code-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
 
-    for (const proxy of proxies) {
+        .code-title {
+            font-size: 1.35rem;
+            color: var(--accent-gold);
+            font-family: var(--font-header);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .code-meta {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 4px;
+        }
+
+        .copy-btn {
+            background-color: var(--accent-gold);
+            color: var(--sidebar-bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: var(--font-header);
+            font-size: 0.88rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-gold-hover);
+            transform: scale(1.03);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--success);
+            color: #000;
+        }
+
+        .how-to-box {
+            background: var(--card-inner);
+            border-left: 4px solid var(--accent-gold);
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid var(--border-color);
+            border-left-width: 4px;
+        }
+
+        .how-to-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #fff;
+            font-family: var(--font-header);
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-header">
+    <div class="brand-title">VEN HUB</div>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+</div>
+
+<aside class="sidebar" id="sidebar">
+    <div class="brand-section">
+        <div class="brand-title">VEN ALLIANCE</div>
+        <div class="brand-sub">Kingdom #2166 Command Center</div>
+    </div>
+
+    <nav class="nav-menu">
+        <div class="nav-group-header" onclick="toggleNavGroup('group-dashboard')">
+            <span>Main Dashboard</span> <span id="group-dashboard-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-dashboard">
+            <a href="index.html" class="nav-item">🏠 Home / Overview</a>
+            <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
+            <a href="calculators.html" class="nav-item">🧮 Calculators</a>
+            <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-alliance')">
+            <span>Alliance Info</span> <span id="group-alliance-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-alliance">
+            <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
+            <a href="rank-structure.html" class="nav-item">👑 Rank Structure</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-guides')">
+            <span>Alliance Guides</span> <span id="group-guides-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-guides">
+            <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
+            <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
+            <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
+            <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
+            <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
+            <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-tools')">
+            <span>Database & Tools</span> <span id="group-tools-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-tools">
+            <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
+            <a href="gift-codes.html" class="nav-item active">🎁 Gift Codes</a>
+        </div>
+    </nav>
+</aside>
+
+<main class="main-content">
+
+    <div class="top-status-bar">
+        <div>
+            <h2>Kingdom #2166 Live Overview</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & alliance operations center</p>
+        </div>
+        <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166 | Syncing...</div>
+    </div>
+
+    <div class="card">
+        <h2>🎁 Active Redeem Gift Codes</h2>
+        <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Active gift codes pre-synced automatically every 12 hours from KingShot.net. Redeem them in-game for free rewards!
+        </p>
+
+        <div class="how-to-box">
+            <h3>💡 How to Redeem Codes in Kingshot</h3>
+            <p style="margin: 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                1. Open Kingshot and tap your <strong>Lord Avatar</strong> in the top-left corner.<br>
+                2. Tap the <strong>Settings (Gear Icon)</strong> at the bottom of the screen.<br>
+                3. Select <strong>Gift Code</strong>, paste the copied code below, and tap <strong>Redeem</strong>.
+            </p>
+        </div>
+
+        <h3 style="margin-top: 25px; margin-bottom: 15px; font-family: var(--font-header); color: var(--accent-gold);">Available Codes</h3>
+        <div id="codes-list">
+            <p style="color: var(--text-muted);">Loading gift codes...</p>
+        </div>
+    </div>
+
+    <footer>
+        VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+    </footer>
+
+</main>
+
+<script src="script.js"></script>
+<script>
+    async function loadGiftCodes() {
+        const container = document.getElementById('codes-list');
+        
         try {
-            const res = await fetch(proxy);
-            if (res.ok) {
-                const data = await res.json();
-                if (data && data.contents) {
-                    try { return JSON.parse(data.contents); } catch(e) { return data.contents; }
+            let data = null;
+
+            // 1. Try reading pre-synced gift-codes.json from GitHub Actions
+            try {
+                const jsonRes = await fetch('./gift-codes.json');
+                if (jsonRes.ok) {
+                    data = await jsonRes.json();
                 }
-                return data;
+            } catch (e) {}
+
+            // 2. Fallback: Fetch directly from API if local JSON doesn't exist yet
+            if (!data) {
+                try {
+                    const apiRes = await fetch('https://kingshot.net/api/gift-codes');
+                    if (apiRes.ok) {
+                        data = await apiRes.json();
+                    }
+                } catch (e) {}
             }
-        } catch (e) {
-            // Fallthrough
+
+            // 3. Render codes
+            if (data && data.data && Array.isArray(data.data.giftCodes) && data.data.giftCodes.length > 0) {
+                renderCodes(data.data.giftCodes);
+            } else {
+                // Default active fallback
+                renderCodes([
+                    { id: 1, code: "VIP777", expiresAt: "2026-12-31T23:59:59.000Z" },
+                    { id: 2, code: "Kingshot888", expiresAt: null }
+                ]);
+            }
+        } catch (err) {
+            container.innerHTML = '<p style="color: var(--danger);">Failed to load gift codes. Please try again later.</p>';
         }
     }
-    return null;
-}
 
-async function loadGiftCodes() {
-    const container = document.getElementById('codes-list');
-    const cachedCodes = localStorage.getItem(CACHE_KEY);
-    const lastFetch = localStorage.getItem(TIMESTAMP_KEY);
-    const now = Date.now();
+    function renderCodes(codes) {
+        const container = document.getElementById('codes-list');
+        container.innerHTML = codes.map(c => {
+            const expDate = c.expiresAt 
+                ? new Date(c.expiresAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) 
+                : 'No Expiration Date • Active';
 
-    // 1. If cache exists and is newer than 12 hours, render immediately!
-    if (cachedCodes && lastFetch && (now - parseInt(lastFetch, 10) < TWELVE_HOURS_MS)) {
-        renderCodes(JSON.parse(cachedCodes));
-        return;
-    }
-
-    // 2. Otherwise, fetch fresh codes from the API
-    try {
-        let data = null;
-
-        try {
-            const directRes = await fetch('https://kingshot.net/api/gift-codes');
-            if (directRes.ok) data = await directRes.json();
-        } catch(e) {}
-
-        if (!data) {
-            data = await fetchApiProxy('https://kingshot.net/api/gift-codes');
-        }
-
-        if (data && data.status === 'success' && data.data && Array.isArray(data.data.giftCodes) && data.data.giftCodes.length > 0) {
-            // Update cache & timestamp
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data.data.giftCodes));
-            localStorage.setItem(TIMESTAMP_KEY, now.toString());
-            renderCodes(data.data.giftCodes);
-        } else if (cachedCodes) {
-            // If API fails, fall back to expired cache rather than breaking
-            renderCodes(JSON.parse(cachedCodes));
-        } else {
-            // Hard fallbacks if API is dead and no cache exists
-            const fallbackCodes = [
-                { id: 1, code: "VIP777", expiresAt: "2026-12-31T23:59:59.000Z" },
-                { id: 2, code: "Kingshot888", expiresAt: null }
-            ];
-            renderCodes(fallbackCodes);
-        }
-    } catch (err) {
-        if (cachedCodes) {
-            renderCodes(JSON.parse(cachedCodes));
-        } else {
-            container.innerHTML = '<p style="color: var(--danger);">Failed to load gift codes. Please check back later.</p>';
-        }
-    }
-}
-
-function renderCodes(codes) {
-    const container = document.getElementById('codes-list');
-    container.innerHTML = codes.map(c => {
-        const expDate = c.expiresAt 
-            ? new Date(c.expiresAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) 
-            : 'No Expiration Date • Active';
-            
-        return `
-            <div class="code-card">
-                <div>
-                    <div class="code-title">${c.code}</div>
-                    <div class="code-meta">Expires: ${expDate}</div>
+            return `
+                <div class="code-card">
+                    <div>
+                        <div class="code-title">${c.code}</div>
+                        <div class="code-meta">Expires: ${expDate}</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyCode('${c.code}', this)">Copy Code</button>
                 </div>
-                <button class="copy-btn" onclick="copyCode('${c.code}', this)">Copy Code</button>
-            </div>
-        `;
-    }).join('');
-}
+            `;
+        }).join('');
+    }
 
-function copyCode(code, buttonElement) {
-    navigator.clipboard.writeText(code).then(() => {
-        const originalText = buttonElement.innerText;
-        buttonElement.innerText = "Copied! ✔";
-        buttonElement.classList.add("copied");
+    function copyCode(code, buttonElement) {
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = buttonElement.innerText;
+            buttonElement.innerText = "Copied! ✔";
+            buttonElement.classList.add("copied");
 
-        setTimeout(() => {
-            buttonElement.innerText = originalText;
-            buttonElement.classList.remove("copied");
-        }, 2000);
-    }).catch(() => {
-        alert('Code: ' + code);
-    });
-}
+            setTimeout(() => {
+                buttonElement.innerText = originalText;
+                buttonElement.classList.remove("copied");
+            }, 2000);
+        }).catch(() => {
+            alert('Code: ' + code);
+        });
+    }
 
-document.addEventListener("DOMContentLoaded", loadGiftCodes);
+    document.addEventListener("DOMContentLoaded", loadGiftCodes);
+</script>
+</body>
+</html>
