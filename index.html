@@ -20,27 +20,47 @@
     </div>
 
     <nav class="nav-menu">
-        <div class="nav-group-title">Main Dashboard</div>
-        <a href="index.html" class="nav-item active">🏠 Home / Overview</a>
-        <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
-        <a href="calculators.html" class="nav-item">🧮 Calculators</a>
-        <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+        <!-- Main Dashboard Group -->
+        <div class="nav-group-header" onclick="toggleNavGroup('group-dashboard')">
+            <span>Main Dashboard</span> <span id="group-dashboard-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-dashboard">
+            <a href="index.html" class="nav-item active">🏠 Home / Overview</a>
+            <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
+            <a href="calculators.html" class="nav-item">🧮 Calculators</a>
+            <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+        </div>
 
-        <div class="nav-group-title">Alliance Info</div>
-        <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
-        <a href="rank-structure.html" class="nav-item">👑 Rank Structure</a>
+        <!-- Alliance Info Group -->
+        <div class="nav-group-header" onclick="toggleNavGroup('group-alliance')">
+            <span>Alliance Info</span> <span id="group-alliance-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-alliance">
+            <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
+            <a href="rank-structure.html" class="nav-item">👑 Rank Structure</a>
+        </div>
 
-        <div class="nav-group-title">Alliance Guides</div>
-        <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
-        <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
-        <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
-        <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
-        <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
-        <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+        <!-- Alliance Guides Group -->
+        <div class="nav-group-header" onclick="toggleNavGroup('group-guides')">
+            <span>Alliance Guides</span> <span id="group-guides-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-guides">
+            <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
+            <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
+            <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
+            <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
+            <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
+            <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+        </div>
 
-        <div class="nav-group-title">Database & Tools</div>
-        <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
-        <a href="gift-codes.html" class="nav-item">🎁 Gift Codes</a>
+        <!-- Database & Tools Group -->
+        <div class="nav-group-header" onclick="toggleNavGroup('group-tools')">
+            <span>Database & Tools</span> <span id="group-tools-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-tools">
+            <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
+            <a href="gift-codes.html" class="nav-item">🎁 Gift Codes</a>
+        </div>
     </nav>
 </aside>
 
@@ -66,13 +86,13 @@
     </div>
 
     <!-- Current Live Events Grid (Dynamic via script.js) -->
-    <h2 style="font-family: var(--font-header); font-size: 1.3rem; margin-bottom: 15px; border-left: 4px solid var(--accent-gold); padding-left: 10px;">🔥 Current Live Events</h2>
+    <h2 style="font-family: var(--font-header); font-size: 1.2rem; margin-bottom: 14px; border-left: 4px solid var(--accent-gold); padding-left: 10px;">🔥 Current Live Events</h2>
     <div id="live-events-grid" class="home-grid">
         <!-- Rendered dynamically by script.js -->
     </div>
 
     <!-- Upcoming & Featured Warfare Grid -->
-    <h2 style="font-family: var(--font-header); font-size: 1.3rem; margin-bottom: 15px; border-left: 4px solid var(--accent-gold); padding-left: 10px;">📅 Upcoming & Featured Warfare</h2>
+    <h2 style="font-family: var(--font-header); font-size: 1.2rem; margin-bottom: 14px; border-left: 4px solid var(--accent-gold); padding-left: 10px;">📅 Upcoming & Featured Warfare</h2>
     <div class="home-grid">
         <a href="alliance-mobilization.html" class="home-card">
             <div>
