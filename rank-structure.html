@@ -3,60 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alliance Rank Structure - VEN Alliance Hub</title>
+    <title>Rank Structure - VEN Alliance Hub</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-    <nav>
-        <a href="index.html" class="logo">VEN Alliance Hub</a>
-        <div class="nav-links">
-            <a href="index.html">🏠 Home</a>
-            
-            <div class="dropdown">
-                <a href="#">Alliance ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="ven-notices.html">📢 Alliance Notices</a>
-                        <a href="rank-structure.html">👑 Rank Structure</a>
-                        <a href="alliance-battles.html">⚔️ Alliance Battles</a>
-                    </div>
-                </div>
-            </div>
+<div class="mobile-header">
+    <div class="brand-title">VEN HUB</div>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+</div>
 
-            <div class="dropdown">
-                <a href="#">Events & Guides ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="bear-trap.html">🐻 Bear Trap Guide</a>
-                        <a href="viking-attack.html">🛡️ Viking Attack Guide</a>
-                        <a href="swordland-showdown.html">🗡️ Swordland Showdown</a>
-                        <a href="alliance-mobilization.html">📋 Alliance Mobilization</a>
-                        <a href="alliance-championship.html">🏆 Alliance Championship</a>
-                    </div>
-                </div>
-            </div>
+<aside class="sidebar" id="sidebar">
+    <div class="brand-section">
+        <div class="brand-title">VEN ALLIANCE</div>
+        <div class="brand-sub">Kingdom #2166 Command Center</div>
+    </div>
 
-            <div class="dropdown">
-                <a href="#">Database & Tools ▾</a>
-                <div class="dropdown-content">
-                    <div class="dropdown-menu">
-                        <a href="gen-1-heroes.html">🦸 Gen 1 Heroes Tier</a>
-                        <a href="hero-calculator.html">⭐ Hero Shards Calculator</a>
-                        <a href="glossary.html">📖 Game Glossary</a>
-                        <a href="gift-codes.html">🎁 Gift Codes</a>
-                    </div>
-                </div>
-            </div>
+    <nav class="nav-menu">
+        <div class="nav-group-header" onclick="toggleNavGroup('group-dashboard')">
+            <span>Main Dashboard</span> <span id="group-dashboard-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-dashboard">
+            <a href="index.html" class="nav-item">🏠 Home / Overview</a>
+            <a href="timeline.html" class="nav-item">🏛️ Kingdom Timeline</a>
+            <a href="calculators.html" class="nav-item">🧮 Calculators</a>
+            <a href="glossary.html" class="nav-item">📖 Game Glossary</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-alliance')">
+            <span>Alliance Info</span> <span id="group-alliance-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-alliance">
+            <a href="ven-notices.html" class="nav-item">📢 Alliance Notices</a>
+            <a href="rank-structure.html" class="nav-item active">👑 Rank Structure</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-guides')">
+            <span>Alliance Guides</span> <span id="group-guides-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-guides">
+            <a href="alliance-battles.html" class="nav-item">⚔️ Alliance Battles</a>
+            <a href="bear-trap.html" class="nav-item">🐻 Bear Trap Guide</a>
+            <a href="viking-attack.html" class="nav-item">🛡️ Viking Attack Guide</a>
+            <a href="swordland-showdown.html" class="nav-item">🗡️ Swordland Showdown</a>
+            <a href="alliance-mobilization.html" class="nav-item">📋 Alliance Mobilization</a>
+            <a href="alliance-championship.html" class="nav-item">🏆 Alliance Championship</a>
+        </div>
+
+        <div class="nav-group-header" onclick="toggleNavGroup('group-tools')">
+            <span>Database & Tools</span> <span id="group-tools-arrow">▾</span>
+        </div>
+        <div class="nav-group-content" id="group-tools">
+            <a href="gen-1-heroes.html" class="nav-item">🦸 Gen 1 Heroes Tier</a>
+            <a href="gift-codes.html" class="nav-item">🎁 Gift Codes</a>
         </div>
     </nav>
-</header>
+</aside>
 
-<main class="content-page">
+<main class="main-content">
+
+    <div class="top-status-bar">
+        <div>
+            <h2>Kingdom #2166 Live Overview</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Real-time server sync & alliance operations center</p>
+        </div>
+        <div id="kingdom-header-badge" class="kingdom-badge">Kingdom: #2166 | Syncing...</div>
+    </div>
 
     <div class="card guide-content">
-        <h1>👑 Alliance Rank Structure</h1>
+        <h2>👑 Alliance Rank Structure</h2>
         <p>Our ranks are based on <strong>activity, responsibility, and contribution</strong>. Every role is important in helping our alliance grow stronger together.</p>
 
         <h2>👑 R5 — Alliance Leader</h2>
@@ -95,15 +110,15 @@
         </ul>
 
         <blockquote>
-            <strong>Every rank plays an important role in our success. Stay active, support one another, and let's continue building a stronger alliance together! 💪</strong>
+            Every rank plays an important role in our success. Stay active, support one another, and let's continue building a stronger alliance together! 💪
         </blockquote>
     </div>
 
-</main>
+    <footer>
+        VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
+    </footer>
 
-<footer>
-    VEN Alliance Hub © 2026 • Official Kingdom #2166 Command Center
-</footer>
+</main>
 
 <script src="script.js"></script>
 </body>
