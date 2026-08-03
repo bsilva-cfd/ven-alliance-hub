@@ -2,8 +2,11 @@ name: Sync Gift Codes Every 12 Hours
 
 on:
   schedule:
-    - cron: '0 */12 * * *' # Runs automatically every 12 hours
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+    - cron: '0 */12 * * *'
+  workflow_dispatch: 
+
+permissions:
+  contents: write 
 
 jobs:
   update-codes:
