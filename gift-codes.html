@@ -171,41 +171,60 @@
     </footer>
 
 </main>
-
 <script src="script.js"></script>
 <script>
     async function loadGiftCodes() {
         const container = document.getElementById('codes-list');
         
         try {
-            let data = null;
+            let giftCodes = null;
 
-            // 1. Try reading pre-synced gift-codes.json from GitHub Actions
+            
             try {
-                const jsonRes = await fetch('./gift-codes.json');
-                if (jsonRes.ok) {
-                    data = await jsonRes.json();
+                const apiRes = await fetch('https://kingshot.net/api/gift-codes?t=' + Date.now());
+                if (apiRes.ok) {
+                    const data = await apiRes.json();
+                    if (data && data.status === 'success' && data.data && Array.isArray(data.data.giftCodes)) {
+                        giftCodes = data.data.giftCodes;
+                    }
                 }
             } catch (e) {}
 
-            // 2. Fallback: Fetch directly from API if local JSON doesn't exist yet
-            if (!data) {
+            
+            if (!giftCodes) {
                 try {
-                    const apiRes = await fetch('https://kingshot.net/api/gift-codes');
-                    if (apiRes.ok) {
-                        data = await apiRes.json();
+                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent('https://kingshot.net/api/gift-codes')}&timestamp=${Date.now()}`;
+                    const proxyRes = await fetch(proxyUrl);
+                    if (proxyRes.ok) {
+                        const proxyData = await proxyRes.json();
+                        const parsed = typeof proxyData.contents === 'string' ? JSON.parse(proxyData.contents) : proxyData.contents;
+                        if (parsed && parsed.status === 'success' && parsed.data && Array.isArray(parsed.data.giftCodes)) {
+                            giftCodes = parsed.data.giftCodes;
+                        }
                     }
                 } catch (e) {}
             }
 
-            // 3. Render codes
-            if (data && data.data && Array.isArray(data.data.giftCodes) && data.data.giftCodes.length > 0) {
-                renderCodes(data.data.giftCodes);
+            
+            if (!giftCodes) {
+                try {
+                    const jsonRes = await fetch('./gift-codes.json?t=' + Date.now());
+                    if (jsonRes.ok) {
+                        const jsonData = await jsonRes.json();
+                        if (jsonData && jsonData.data && Array.isArray(jsonData.data.giftCodes)) {
+                            giftCodes = jsonData.data.giftCodes;
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            
+            if (giftCodes && giftCodes.length > 0) {
+                renderCodes(giftCodes);
             } else {
-                // Default active fallback
                 renderCodes([
-                    { id: 1, code: "VIP777", expiresAt: "2026-12-31T23:59:59.000Z" },
-                    { id: 2, code: "Kingshot888", expiresAt: null }
+                    { id: 123, code: "KS0803", expiresAt: "2026-08-03T23:59:00.000Z" },
+                    { id: 93, code: "Kingshot888", expiresAt: null }
                 ]);
             }
         } catch (err) {
