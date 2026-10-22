@@ -1,1 +1,1 @@
-{"status":"success","data":{"giftCodes":[{"id":156,"code":"lwaL5ZKx5","expiresAt":null,"createdAt":"2026-10-21T08:32:49.460Z"}],"total":143,"activeCount":1,"expiredCount":142},"message":"Gift codes retrieved successfully","meta":null,"timestamp":"2026-10-21T16:48:14.255Z"}
+{"status":"success","data":{"giftCodes":[],"total":143,"activeCount":0,"expiredCount":143},"message":"Gift codes retrieved successfully","meta":null,"timestamp":"2026-10-22T03:45:16.097Z"}
