@@ -1,1 +1,1 @@
-{"status":"success","data":{"giftCodes":[],"total":145,"activeCount":0,"expiredCount":145},"message":"Gift codes retrieved successfully","meta":null,"timestamp":"2026-10-31T04:36:20.119Z"}
+{"status":"success","data":{"giftCodes":[{"id":159,"code":"TREAT4U","expiresAt":"2026-11-04T23:59:00.000Z","createdAt":"2026-10-31T12:01:59.830Z"}],"total":146,"activeCount":1,"expiredCount":145},"message":"Gift codes retrieved successfully","meta":null,"timestamp":"2026-10-31T16:57:45.814Z"}
